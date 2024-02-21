@@ -19,7 +19,6 @@ public class UserRequest {
 
     public static User mapRequestToEntity(UserRequest userRequest) {
         User usuario = new User();
-
         usuario.setId(userRequest.getId());
         usuario.setUsername(userRequest.getUsername());
         usuario.setPassword(userRequest.getPassword());
@@ -27,6 +26,5 @@ public class UserRequest {
 
         return usuario;
     }
-
 
 }

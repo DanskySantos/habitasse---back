@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterDto {
+public class RegisterRequest {
 
     private Long id;
     private String name;
@@ -20,18 +20,18 @@ public class RegisterDto {
     private String password;
     private String email;
 
-    public static Person mapRequestToEntity(RegisterDto request) {
+    public static Person mapRequestToEntity(RegisterRequest request) {
         Date birthday = null;
         if (request.getBirthday() != null || request.getBirthday() == "''") {
             birthday = Utils.dateToSave(request.getBirthday());
         }
-
         Person person = new Person();
-
         person.setId(request.getId());
         person.setName(request.getName());
         person.setBirthday(birthday);
         return person;
     }
+
+
 
 }

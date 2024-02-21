@@ -3,7 +3,7 @@ package com.project.habitasse.security.user.service;
 import com.project.habitasse.security.person.entities.Person;
 import com.project.habitasse.security.person.repository.PersonRepository;
 import com.project.habitasse.security.user.entities.User;
-import com.project.habitasse.security.user.entities.request.RegisterDto;
+import com.project.habitasse.security.user.entities.request.RegisterRequest;
 import com.project.habitasse.security.user.repository.UserRepository;
 import com.project.habitasse.utils.Utils;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PersonRepository pessoaRepository;
 
-    public RegisterDto save(RegisterDto request) {
+    public RegisterRequest save(RegisterRequest request) {
         User user = new User();
         Person person = new Person();
 
@@ -38,6 +40,11 @@ public class UserService implements UserDetailsService {
         return request;
     }
 
+    public List<User> findAllUser(){
+        return usuarioRepository.findAll();
+    }
+
+
     public User findById(Long id) {
         User usuario = usuarioRepository.findById(id).get();
         if (usuario == null) {
@@ -47,7 +54,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User findByEmail(String email) {
-        User usuario = usuarioRepository.findByEmail(email).get();
+        User usuario = (User) usuarioRepository.findByEmail(email);
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuário não encontrado com o email: " + email);
         }

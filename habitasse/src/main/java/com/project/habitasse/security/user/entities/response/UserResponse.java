@@ -1,6 +1,7 @@
 package com.project.habitasse.security.user.entities.response;
 
 import com.project.habitasse.security.user.entities.User;
+import jdk.jshell.Snippet;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,9 @@ public class UserResponse {
         return UserResponse.builder()
                 .id(result.getId())
                 .username(result.getUsername())
+                .password(result.getPassword())
+                .email(result.getEmail())
                 .build();
     }
+
 }

@@ -29,12 +29,6 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
-    @Column(name = "is_user_cd", length = 255)
-    private boolean IsUserCD;
-
-    @Column(name = "is_user_co", length = 255)
-    private boolean IsUserCO;
-
     @Column(name = "email", length = 255, unique = true, nullable = false)
     private String email;
 
@@ -51,8 +45,17 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Retorne as permissões do usuário, se necessário
         return Collections.emptyList();
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
     }
 
     @Override

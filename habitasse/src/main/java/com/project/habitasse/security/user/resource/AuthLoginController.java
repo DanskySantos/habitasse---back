@@ -6,13 +6,13 @@ import com.project.habitasse.security.user.entities.response.UserResponse;
 import com.project.habitasse.security.user.repository.UserRepository;
 import com.project.habitasse.security.user.service.JwtTokenProvider;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +32,8 @@ public class AuthLoginController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthenticationRequest authenticationRequest) {
         try {
-            var usernamePassword = new UsernamePasswordAuthenticationToken(authenticationRequest.email(), authenticationRequest.password());
-            var auth = authenticationManager.authenticate(usernamePassword);
+            UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(authenticationRequest.email(), authenticationRequest.password());
+            Authentication auth = authenticationManager.authenticate(usernamePassword);
             var token = tokenService.generateToken((UserResponse) auth.getPrincipal());
             return ResponseEntity.ok(new LoginResponse(token, "username"));
         } catch (AuthenticationException e) {

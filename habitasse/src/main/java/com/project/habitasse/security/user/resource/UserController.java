@@ -1,4 +1,4 @@
-package com.project.habitasse.security.user.controller;
+package com.project.habitasse.security.user.resource;
 
 
 import com.project.habitasse.security.user.entities.User;

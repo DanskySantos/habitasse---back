@@ -1,7 +1,6 @@
-package com.project.habitasse.security.user.controller;
+package com.project.habitasse.security.user.resource;
 
 import com.project.habitasse.security.user.entities.request.AuthenticationRequest;
-import com.project.habitasse.security.user.entities.request.RegisterRequest;
 import com.project.habitasse.security.user.entities.response.LoginResponse;
 import com.project.habitasse.security.user.entities.response.UserResponse;
 import com.project.habitasse.security.user.repository.UserRepository;
@@ -11,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,12 +27,29 @@ public class AuthLoginController {
     private JwtTokenProvider tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login (@RequestBody @Valid AuthenticationRequest data){
+    public ResponseEntity login(@RequestBody @Valid AuthenticationRequest data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
         var token = tokenService.generateToken((UserResponse) auth.getPrincipal());
         return ResponseEntity.ok(new LoginResponse(token, "username"));
     }
+
+//    @PostMapping("/login")
+//    public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest loginForm) {
+//        try {
+//            Authentication authentication = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword()));
+//
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//            String token = jwtTokenProvider.generateToken(authentication);
+//            return ResponseEntity.ok(new LoginDto(loginForm.getUsername(), loginForm.getPassword(), token));
+//        } catch (AuthenticationException e) {
+//            // Log the exception details
+//            System.out.print(e.getMessage());
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
+//        }
+//    }
 
    /* @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterRequest data){

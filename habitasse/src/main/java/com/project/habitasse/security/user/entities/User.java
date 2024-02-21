@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tb_usuarios")
+@Table(name = "tb_user")
 public class User extends SuperclassEntity implements Serializable, UserDetails {
 
     @Column(name = "username", length = 255, nullable = false)
@@ -41,7 +41,7 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
 
     @ManyToOne
     @JoinColumn(name="user_role_id", nullable=false)
-    private List<UserRole> userRoles;
+    private UserRole userRoles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

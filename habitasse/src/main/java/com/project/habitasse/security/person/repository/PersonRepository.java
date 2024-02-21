@@ -9,7 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
-	Person findRoleByNome(String roleName);
-
-	UserDetails findByEmail(String login);
+	Person findRoleByName(String roleName);
 }

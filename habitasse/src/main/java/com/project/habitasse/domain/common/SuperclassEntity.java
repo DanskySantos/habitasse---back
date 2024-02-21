@@ -24,10 +24,10 @@ public class SuperclassEntity implements Serializable {
     @Column(unique = true)
     private String uuid = UUID.randomUUID().toString();
 
-    @Column(nullable = false)
+    @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
-    @Column()
+    @Column(name = "update_date")
     private LocalDateTime updateDate;
 
     @PrePersist

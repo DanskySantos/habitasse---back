@@ -18,6 +18,7 @@ public class UserRole implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "role_name", length = 255)
     private String roleName;
 
 //    public static Role createRoleForUser(UserRequest userRequest) {

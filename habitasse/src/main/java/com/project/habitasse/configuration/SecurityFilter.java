@@ -1,6 +1,5 @@
 package com.project.habitasse.configuration;
 
-import com.project.habitasse.security.person.repository.PersonRepository;
 import com.project.habitasse.security.user.repository.UserRepository;
 import com.project.habitasse.security.user.service.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
@@ -27,23 +26,23 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-            var token = this.recoverToken(request);
-            if(token != null){
-                var login = tokenService.validateToken(token);
-                UserDetails user =  userRepository.findByEmail(login);
+        var token = this.recoverToken(request);
+        if (token != null) {
+            var login = tokenService.validateToken(token);
+            UserDetails user = userRepository.findByEmail(login);
 
-                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-            filterChain.doFilter(request, response);
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+        filterChain.doFilter(request, response);
     }
 
 
-    private String recoverToken(HttpServletRequest request){
+    private String recoverToken(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");
-        if(authHeader == null) return null;
+        if (authHeader == null) return null;
         var token = authHeader.replace("Bearer", "");
-        if(token.trim().isBlank()) return null;
+        if (token.trim().isBlank()) return null;
         return token.trim();
     }
 }

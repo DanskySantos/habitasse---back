@@ -3,6 +3,7 @@ package com.project.habitasse.security.user.entities;
 import com.project.habitasse.domain.common.SuperclassEntity;
 import com.project.habitasse.domain.offer.entities.Offer;
 import com.project.habitasse.security.person.entities.Person;
+import com.project.habitasse.security.roles.entity.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,6 +44,10 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Offer> offers;
+
+    @ManyToOne
+    @JoinColumn(name="user_role_id", nullable=false)
+    private List<UserRole> userRoles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

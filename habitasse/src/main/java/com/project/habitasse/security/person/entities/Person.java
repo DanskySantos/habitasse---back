@@ -17,7 +17,7 @@ import java.util.Date;
 @Table(name = "tb_person")
 public class Person extends SuperclassEntity implements Serializable {
 
-    @Column(name = "nome", length = 255, nullable = false)
+    @Column(name = "name", length = 255, nullable = false)
     private String name;
 
     @Column(name = "birthday", length = 255)

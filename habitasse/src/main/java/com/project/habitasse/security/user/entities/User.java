@@ -3,9 +3,11 @@ package com.project.habitasse.security.user.entities;
 import com.project.habitasse.domain.common.SuperclassEntity;
 import com.project.habitasse.domain.offer.entities.Offer;
 import com.project.habitasse.security.person.entities.Person;
-import com.project.habitasse.security.roles.entity.UserRole;
+import com.project.habitasse.security.roles.entity.Role;
+import com.project.habitasse.security.user.entities.request.RegisterRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,10 +15,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -39,23 +41,27 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Offer> offers;
 
-    @ManyToOne
-    @JoinColumn(name="user_role_id", nullable=false)
-    private UserRole userRoles;
+//    @ManyToOne
+//    @JoinColumn(name="user_role_id", nullable=false)
+//    private UserRole userRoles;
+
+    @Column(name = "role_id")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return role.getAuthorities();
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return email;
     }
 
     @Override
@@ -76,5 +82,14 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public static User createUser(RegisterRequest registerRequest) {
+        return User.builder()
+                .username(registerRequest.getUsername())
+                .password(registerRequest.getPassword())
+                .email(registerRequest.getEmail())
+                .role(registerRequest.getUserRoles())
+                .build();
     }
 }

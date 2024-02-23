@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserRequest {
 
-    private Long id;
+    private Integer id;
     private String username;
     private String password;
     private String email;

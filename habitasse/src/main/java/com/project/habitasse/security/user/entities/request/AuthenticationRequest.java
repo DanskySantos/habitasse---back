@@ -1,4 +1,14 @@
 package com.project.habitasse.security.user.entities.request;
 
-public record AuthenticationRequest(String email, String password) {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AuthenticationRequest {
+
+    private String email;
+    private String password;
 }

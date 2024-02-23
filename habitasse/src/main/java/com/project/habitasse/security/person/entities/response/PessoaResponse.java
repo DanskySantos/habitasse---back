@@ -16,7 +16,7 @@ import java.util.Date;
 @Builder
 public class PessoaResponse {
 
-	private Long id;
+	private Integer id;
 	private String name;
 	private Date birthday;
 	private LocalDateTime creationDate;

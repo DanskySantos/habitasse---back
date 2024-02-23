@@ -19,7 +19,7 @@ public class SuperclassEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Access(AccessType.PROPERTY)
-    protected Long id;
+    protected Integer id;
 
     @Column(unique = true)
     private String uuid = UUID.randomUUID().toString();
@@ -38,7 +38,7 @@ public class SuperclassEntity implements Serializable {
     public SuperclassEntity() {
     }
 
-    public SuperclassEntity(Long id) {
+    public SuperclassEntity(Integer id) {
         this.id = id;
     }
 

@@ -1,9 +1,13 @@
 package com.project.habitasse.security.person.entities;
 
 import com.project.habitasse.domain.common.SuperclassEntity;
-import com.project.habitasse.security.user.entities.User;
-import jakarta.persistence.*;
+import com.project.habitasse.security.user.entities.request.RegisterRequest;
+import com.project.habitasse.utils.Utils;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +15,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -26,7 +31,18 @@ public class Person extends SuperclassEntity implements Serializable {
     @Column(name = "phone", length = 255)
     private String phone;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @Column(name = "user_id")
+    private Integer userId;
+
+    public static Person createPerson(RegisterRequest registerRequest) {
+        Date birthday = null;
+        if (registerRequest.getBirthday() != null || registerRequest.getBirthday() == "''") {
+            birthday = Utils.dateToSave(registerRequest.getBirthday());
+        }
+
+        return Person.builder()
+                .name(registerRequest.getName())
+                .birthday(birthday)
+                .build();
+    }
 }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PessoaRequest {
 
-	private Long id;
+	private Integer id;
 	private String nome;
 	private LocalDateTime dataNascimento;
 	private LocalDateTime dataCriacao;

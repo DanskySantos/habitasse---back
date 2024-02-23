@@ -54,18 +54,19 @@ public class UserService implements UserDetailsService {
         saveUserToken(userSaved, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
+                .userName(userSaved.getUsernameForDto())
                 .refreshToken(refreshToken)
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
+                        authenticationRequest.getEmail(),
+                        authenticationRequest.getPassword()
                 )
         );
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        var user = userRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
@@ -73,6 +74,7 @@ public class UserService implements UserDetailsService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .userName(user.getUsernameForDto())
                 .build();
     }
 

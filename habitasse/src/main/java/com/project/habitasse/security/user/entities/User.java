@@ -61,7 +61,12 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
 
     @Override
     public String getUsername() {
+        //returning email for spring security
         return email;
+    }
+
+    public String getUsernameForDto() {
+        return username;
     }
 
     @Override

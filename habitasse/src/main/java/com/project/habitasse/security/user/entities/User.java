@@ -45,7 +45,7 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
 //    @JoinColumn(name="user_role_id", nullable=false)
 //    private UserRole userRoles;
 
-    @Column(name = "role_id")
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
 

@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -131,16 +132,16 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public User findById(Long id) {
-        return userRepository.findById(id).get();
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email).get();
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
-    public User findByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).get();
+    public Optional<User> findByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username);
     }
 
     @Override

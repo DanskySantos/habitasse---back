@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -36,7 +37,7 @@ public class Person extends SuperclassEntity implements Serializable {
 
     public static Person createPerson(RegisterRequest registerRequest) {
         Date birthday = null;
-        if (registerRequest.getBirthday() != null || registerRequest.getBirthday() == "''") {
+        if (registerRequest.getBirthday() != null && StringUtils.hasText(registerRequest.getBirthday())) {
             birthday = Utils.dateToSave(registerRequest.getBirthday());
         }
 

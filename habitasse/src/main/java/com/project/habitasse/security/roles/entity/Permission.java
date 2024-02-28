@@ -3,6 +3,7 @@ package com.project.habitasse.security.roles.entity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum Permission {
 
@@ -15,6 +16,5 @@ public enum Permission {
     USER_CREATE("user:create"),
     USER_DELETE("user:delete");
 
-    @Getter
     private final String permission;
 }

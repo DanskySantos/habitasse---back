@@ -26,7 +26,15 @@ public enum Role {
                     USER_DELETE
             )
     ),
-    USER(
+    USER_CD(
+            Set.of(
+                    USER_READ,
+                    USER_UPDATE,
+                    USER_CREATE,
+                    USER_DELETE
+            )
+    ),
+    USER_CO(
             Set.of(
                     USER_READ,
                     USER_UPDATE,

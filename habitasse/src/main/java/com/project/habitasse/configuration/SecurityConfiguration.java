@@ -18,7 +18,8 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import static com.project.habitasse.security.roles.entity.Permission.*;
 import static com.project.habitasse.security.roles.entity.Role.ADMIN;
-import static com.project.habitasse.security.roles.entity.Role.USER;
+import static com.project.habitasse.security.roles.entity.Role.USER_CD;
+import static com.project.habitasse.security.roles.entity.Role.USER_CO;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -60,11 +61,16 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL).permitAll()
-                                .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), USER.name())
-                                .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), USER.name())
-                                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name(), USER.name())
-                                .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.name(), USER.name())
-                                .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.name(), USER.name())
+                                .requestMatchers("/api/v1/management/**").hasAnyRole(USER_CO.name(), USER_CD.name())
+                                .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(USER_READ.name(), USER_CD.name())
+                                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(USER_CREATE.name(), USER_CD.name())
+                                .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(USER_UPDATE.name(), USER_CD.name())
+                                .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(USER_DELETE.name(), USER_CD.name())
+
+                                .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(USER_READ.name(), USER_CO.name())
+                                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(USER_CREATE.name(), USER_CO.name())
+                                .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(USER_UPDATE.name(), USER_CO.name())
+                                .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(USER_DELETE.name(), USER_CO.name())
                                 .anyRequest()
                                 .authenticated()
                 )

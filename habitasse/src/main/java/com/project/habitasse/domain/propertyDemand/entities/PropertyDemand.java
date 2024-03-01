@@ -4,9 +4,8 @@ import com.project.habitasse.domain.address.entities.Address;
 import com.project.habitasse.domain.common.SuperclassEntity;
 import com.project.habitasse.domain.demand.entities.Demand;
 import com.project.habitasse.domain.enums.*;
-import com.project.habitasse.domain.propertyDemand.entities.request.RegisterRequestDemand;
+import com.project.habitasse.domain.propertyDemand.entities.request.PropertyDemandRequest;
 import com.project.habitasse.security.user.entities.User;
-import com.project.habitasse.security.user.entities.request.RegisterRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -67,16 +66,16 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     private User user;
 
 
-    public static PropertyDemand createDemand(RegisterRequestDemand registerRequestDemand) {
+    public static PropertyDemand createPropertyDemand(PropertyDemandRequest propertyDemandRequest) {
         return PropertyDemand.builder()
-                .contractType(ContractTypeEnum.valueOf(registerRequestDemand.getContract_type()))
-                .propertyType(PropertyTypeEnum.valueOf(registerRequestDemand.getProperty_type()))
-                .bedroomsNumber(BedroomsNumberEnum.valueOf(registerRequestDemand.getBedrooms_number()))
-                .furnished(Boolean.parseBoolean(registerRequestDemand.getFurnished()))
-                .petFriendly(Boolean.parseBoolean(registerRequestDemand.getPet_friendly()))
-                .suggestedValueForRent(SuggestedValueForRentEnum.valueOf(registerRequestDemand.getSuggested_value_for_rent()))
-                .suggestedValueForSale(SuggestedValueForSaleEnum.valueOf(registerRequestDemand.getSuggested_value_for_sale()))
-                .suggestedValueForSeasonal(SuggestedValueForSeasonalEnum.valueOf(registerRequestDemand.getSuggested_value_for_seasonal()))
+                .contractType(ContractTypeEnum.valueOf(propertyDemandRequest.getContract_type()))
+                .propertyType(PropertyTypeEnum.valueOf(propertyDemandRequest.getProperty_type()))
+                .bedroomsNumber(BedroomsNumberEnum.valueOf(propertyDemandRequest.getBedrooms_number()))
+                .furnished(Boolean.parseBoolean(propertyDemandRequest.getFurnished()))
+                .petFriendly(Boolean.parseBoolean(propertyDemandRequest.getPet_friendly()))
+                .suggestedValueForRent(SuggestedValueForRentEnum.valueOf(propertyDemandRequest.getSuggested_value_for_rent()))
+                .suggestedValueForSale(SuggestedValueForSaleEnum.valueOf(propertyDemandRequest.getSuggested_value_for_sale()))
+                .suggestedValueForSeasonal(SuggestedValueForSeasonalEnum.valueOf(propertyDemandRequest.getSuggested_value_for_seasonal()))
                 .build();
     }
 }

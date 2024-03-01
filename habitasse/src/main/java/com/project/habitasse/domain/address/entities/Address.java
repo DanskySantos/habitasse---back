@@ -1,6 +1,7 @@
 package com.project.habitasse.domain.address.entities;
 
 import com.project.habitasse.domain.common.SuperclassEntity;
+import com.project.habitasse.domain.propertyDemand.entities.request.PropertyDemandRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.SequenceGenerator;
@@ -29,4 +30,12 @@ public class Address extends SuperclassEntity implements Serializable {
 
     @Column(name = "city", length = 255)
     private String city;
+
+    public static Address createAddress(PropertyDemandRequest propertyDemandRequest) {
+        return Address.builder()
+                .country(propertyDemandRequest.getCountry())
+                .state(propertyDemandRequest.getState())
+                .city(propertyDemandRequest.getCity())
+                .build();
+    }
 }

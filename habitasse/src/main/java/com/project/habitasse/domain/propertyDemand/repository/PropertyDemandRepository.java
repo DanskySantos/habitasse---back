@@ -2,6 +2,7 @@ package com.project.habitasse.domain.propertyDemand.repository;
 
 
 import com.project.habitasse.domain.propertyDemand.entities.PropertyDemand;
+import com.project.habitasse.security.user.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface PropertyDemandRepository extends JpaRepository<PropertyDemand, Long> {
-    Optional<List<PropertyDemand>> findAllByEmail(String email);
+    Optional<List<PropertyDemand>> findAllByUser(User user);
 }

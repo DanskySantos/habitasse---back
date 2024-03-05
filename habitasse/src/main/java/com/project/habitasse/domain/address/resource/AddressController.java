@@ -1,6 +1,6 @@
-package com.project.habitasse.domain.propertyDemand.resource;
+package com.project.habitasse.domain.address.resource;
 
-import com.project.habitasse.domain.propertyDemand.entities.PropertyDemand;
+import com.project.habitasse.domain.address.service.AddressService;
 import com.project.habitasse.domain.propertyDemand.entities.request.PropertyDemandRequest;
 import com.project.habitasse.domain.propertyDemand.service.PropertyDemandService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,22 +9,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/api/v1/register-demand")
+@RequestMapping("/api/v1/address")
 @RequiredArgsConstructor
-public class PropertyDemandController {
+public class AddressController {
 
-    private final PropertyDemandService propertyDemandService;
+    private final AddressService addressService;
 
-    @PostMapping("/demand")
-    public ResponseEntity<?> registerDemand(@RequestBody PropertyDemandRequest propertyDemandRequest, HttpServletRequest request) {
-        if (propertyDemandRequest == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Dados inválidos");
+    @GetMapping("/states")
+    public ResponseEntity<?> getStates() {
+        return ResponseEntity.ok(addressService.findAll());
+    }
 
-        return ResponseEntity.ok(propertyDemandService.registerDemand(propertyDemandRequest, request.getHeader("Authorization")));
+    @GetMapping("/filter-cities/{stateName}")
+    public ResponseEntity<?> getFilteredCities(@PathVariable String stateName) {
+        return ResponseEntity.ok(addressService.filterCities(stateName));
     }
 
 //    @GetMapping("/findByEmail/{email}")

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PropertyDemandResponse {
+
     private Integer id;
     private String contract_type;
     private String property_type;

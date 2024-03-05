@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 
@@ -65,7 +66,6 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-
     public static PropertyDemand createPropertyDemand(PropertyDemandRequest propertyDemandRequest) {
         return PropertyDemand.builder()
                 .contractType(ContractTypeEnum.valueOf(propertyDemandRequest.getContract_type()))
@@ -74,8 +74,12 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
                 .furnished(Boolean.parseBoolean(propertyDemandRequest.getFurnished()))
                 .petFriendly(Boolean.parseBoolean(propertyDemandRequest.getPet_friendly()))
                 .suggestedValueForRent(SuggestedValueForRentEnum.valueOf(propertyDemandRequest.getSuggested_value_for_rent()))
-                .suggestedValueForSale(SuggestedValueForSaleEnum.valueOf(propertyDemandRequest.getSuggested_value_for_sale()))
-                .suggestedValueForSeasonal(SuggestedValueForSeasonalEnum.valueOf(propertyDemandRequest.getSuggested_value_for_seasonal()))
+                .suggestedValueForSale(StringUtils.isEmpty(propertyDemandRequest.getSuggested_value_for_sale())
+                        ? null
+                        : SuggestedValueForSaleEnum.valueOf(propertyDemandRequest.getSuggested_value_for_sale()))
+                .suggestedValueForSeasonal(StringUtils.isEmpty(propertyDemandRequest.getSuggested_value_for_seasonal())
+                        ? null
+                        : SuggestedValueForSeasonalEnum.valueOf(propertyDemandRequest.getSuggested_value_for_seasonal()))
                 .build();
     }
 }

@@ -6,14 +6,14 @@ import lombok.Getter;
 @Getter
 public enum SuggestedValueForRentEnum {
 
-    R$1K("Mil Reais", 1000),
-    R$2K("Dois Mil Reais", 2000),
-    R$3K("Três Mil Reais", 3000),
-    R$4K("Quatro Mil Reais", 4000),
-    R$5K("Cinco Mil Reais", 5000),
-    R$6K("Seis Mil Reais", 6000),
-    R$10K("Dez Mil Reais", 10000),
-    R$15K("Quinze Mil Reais", 15000);
+    R$1K("R$ 1.000,00", 1000),
+    R$2K("R$ 2.000,00", 2000),
+    R$3K("R$ 3.000,00", 3000),
+    R$4K("R$ 4.000,00", 4000),
+    R$5K("R$ 5.000,00", 5000),
+    R$6K("R$ 6.000,00", 6000),
+    R$10K("R$ 10.000,00", 10000),
+    R$15K("R$ 15.000,00", 15000);
 
     private final String desciption;
     private final Integer value;

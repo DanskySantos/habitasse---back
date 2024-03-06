@@ -1,9 +1,12 @@
 package com.project.habitasse.security.user.resource;
 
 
+import com.project.habitasse.domain.propertyDemand.entities.request.PropertyDemandRequest;
 import com.project.habitasse.security.user.entities.User;
 import com.project.habitasse.security.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +15,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
-@RequestMapping("user")
+@RequestMapping("/api/v1/user")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -22,23 +25,15 @@ public class UserController {
         return userService.findAllUser();
     }
 
-
     @GetMapping("/profile")
-    public ResponseEntity<?> getByEmail(@RequestParam String email) {
-        if (email == null || email.isEmpty()) {
-            return ResponseEntity.badRequest().body("O e-mail não pode ser vazio.");
-        }
-        Optional<User> userOptional = userService.findByEmail(email);
-        if (userOptional.isPresent()) {
-            return ResponseEntity.ok(userOptional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<?> getByEmail(HttpServletRequest request) {
+        return ResponseEntity.ok(userService.findByTokenEmail(request.getHeader("Authorization")));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody User updatedUser) {
         User user = userService.updateUser(userId, updatedUser);
+
         return ResponseEntity.ok(user);
     }
 }

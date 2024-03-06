@@ -142,13 +142,17 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
+    public Optional<User> findByTokenEmail(String token) {
+        return userRepository.findByEmail(jwtService.getEmail(token));
+    }
+
     public Optional<User> findByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
     }
 
    public User updateUser(Long id, User updateUser){
         User user = userRepository.findById(id)
-                              .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+                              .orElseThrow(() -> new EntityNotFoundException("Usuário não encotrado com esse id: " + id));
                 user.setEmail(updateUser.getEmail());
                 user.setUsername(updateUser.getUsername());
                 user.setPassword(updateUser.getPassword());

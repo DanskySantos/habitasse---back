@@ -14,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,13 +42,15 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Offer> offers;
 
-//    @ManyToOne
-//    @JoinColumn(name="user_role_id", nullable=false)
-//    private UserRole userRoles;
-
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+//    @Column(name = "authorization_date", nullable = false)
+//    private LocalDateTime authorizationDate;
+//
+//    @Column(name = "expiration_date", nullable = false)
+//    private LocalDateTime expirationDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

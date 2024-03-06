@@ -23,6 +23,15 @@ public enum SuggestedValueForRentEnum {
         this.value = value;
     }
 
+    public static SuggestedValueForRentEnum getByDescription(String description) {
+        for (SuggestedValueForRentEnum suggestedValueForRent : values()) {
+            if (suggestedValueForRent.getDesciption().equals(description)) {
+                return suggestedValueForRent;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant found with description: " + description);
+    }
+
     public boolean is1k() {
         return this.equals(R$1K);
     }

@@ -24,6 +24,9 @@ public class AuthLoginController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
+        if (userService.findByEmail(request.getEmail()).isEmpty())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não existe um usuário com esse e-mail");
+
         return ResponseEntity.ok(userService.authenticate(request));
     }
 

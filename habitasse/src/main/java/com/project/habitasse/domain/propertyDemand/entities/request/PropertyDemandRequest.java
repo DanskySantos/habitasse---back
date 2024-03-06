@@ -13,18 +13,18 @@ import lombok.NoArgsConstructor;
 public class PropertyDemandRequest {
 
     private Integer id;
-    private String contract_type;
-    private String property_type;
-    private String bedrooms_number;
+    private String contractType;
+    private String propertyType;
+    private String bedroomsNumber;
     private String furnished;
-    private String pet_friendly;
-    private String suggested_value_for_rent;
-    private String suggested_value_for_sale;
-    private String suggested_value_for_seasonal;
+    private String petFriendly;
+    private String suggestedValueForRent;
+    private String suggestedValueForSale;
+    private String suggestedValueForSeasonal;
     private String country;
     private String state;
     private String city;
-    private String comments;
+    private String annotation;
     private String contact;
     private PropertyDemand propertyDemand;
 }

@@ -25,6 +25,15 @@ public enum SuggestedValueForSaleEnum {
         this.value = value;
     }
 
+    public static SuggestedValueForSaleEnum getByDescription(String description) {
+        for (SuggestedValueForSaleEnum suggestedValueForSale : values()) {
+            if (suggestedValueForSale.getDesciption().equals(description)) {
+                return suggestedValueForSale;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant found with description: " + description);
+    }
+
     public boolean is400K() {
         return this.equals(R$400K);
     }

@@ -27,8 +27,8 @@ public class Demand extends SuperclassEntity implements Serializable {
     @JoinColumn(name = "property_demand_id", referencedColumnName = "id")
     private PropertyDemand propertyDemand;
 
-    @Column(name = "comments")
-    private String comments;
+    @Column(name = "annotation")
+    private String annotation;
 
     @Column(name = "contact")
     private String contact;
@@ -39,7 +39,7 @@ public class Demand extends SuperclassEntity implements Serializable {
     public static Demand createDemand(PropertyDemandRequest propertyDemandRequest) {
         return Demand.builder()
                 .propertyDemand(propertyDemandRequest.getPropertyDemand())
-                .comments(propertyDemandRequest.getComments() != null ? propertyDemandRequest.getComments() : "")
+                .annotation(propertyDemandRequest.getAnnotation() != null ? propertyDemandRequest.getAnnotation() : "")
                 .contact(propertyDemandRequest.getContact() != null ? propertyDemandRequest.getContact() : "")
                 .build();
     }

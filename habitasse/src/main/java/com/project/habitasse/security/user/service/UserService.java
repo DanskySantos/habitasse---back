@@ -69,6 +69,7 @@ public class UserService implements UserDetailsService {
                         authenticationRequest.getPassword()
                 )
         );
+
         var user = userRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);

@@ -12,9 +12,11 @@ import com.project.habitasse.security.user.entities.request.AuthenticationReques
 import com.project.habitasse.security.user.entities.request.RegisterRequest;
 import com.project.habitasse.security.user.entities.response.AuthenticationResponse;
 import com.project.habitasse.security.user.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.action.internal.EntityActionVetoException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -144,6 +146,15 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
+   public User updateUser(Long id, User updateUser){
+        User user = userRepository.findById(id)
+                              .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+                user.setEmail(updateUser.getEmail());
+                user.setUsername(updateUser.getUsername());
+                user.setPassword(updateUser.getPassword());
+                user.setPerson(updateUser.getPerson());
+        return userRepository.save(user);
+    }
     @Override
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email).get();

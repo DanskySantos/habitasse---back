@@ -16,6 +16,15 @@ public enum ContractTypeEnum {
         this.desciption = desciption;
     }
 
+    public static ContractTypeEnum getByDescription(String description) {
+        for (ContractTypeEnum contractType : values()) {
+            if (contractType.getDesciption().equals(description)) {
+                return contractType;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant found with description: " + description);
+    }
+
     public boolean isRent() {
         return this.equals(RENT);
     }

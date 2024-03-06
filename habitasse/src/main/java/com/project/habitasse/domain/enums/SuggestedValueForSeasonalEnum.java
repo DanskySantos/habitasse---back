@@ -23,6 +23,15 @@ public enum SuggestedValueForSeasonalEnum {
         this.value = value;
     }
 
+    public static SuggestedValueForSeasonalEnum getByDescription(String description) {
+        for (SuggestedValueForSeasonalEnum suggestedValueForSeasonal : values()) {
+            if (suggestedValueForSeasonal.getDesciption().equals(description)) {
+                return suggestedValueForSeasonal;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant found with description: " + description);
+    }
+
     public boolean is200() {
         return this.equals(R$200);
     }

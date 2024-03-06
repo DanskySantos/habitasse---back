@@ -19,7 +19,7 @@ public class PropertyDemandController {
 
     private final PropertyDemandService propertyDemandService;
 
-    @PostMapping("/demand")
+    @PostMapping("/save")
     public ResponseEntity<?> registerDemand(@RequestBody PropertyDemandRequest propertyDemandRequest, HttpServletRequest request) {
         if (propertyDemandRequest == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Dados inválidos");

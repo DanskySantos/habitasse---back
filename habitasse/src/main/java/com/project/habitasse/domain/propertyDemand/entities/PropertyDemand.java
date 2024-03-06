@@ -1,5 +1,6 @@
 package com.project.habitasse.domain.propertyDemand.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.habitasse.domain.address.entities.Address;
 import com.project.habitasse.domain.common.SuperclassEntity;
 import com.project.habitasse.domain.demand.entities.Demand;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -55,6 +57,7 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     private SuggestedValueForSeasonalEnum suggestedValueForSeasonal;
 
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "demand_id", referencedColumnName = "id")
     private Demand demand;
 
@@ -68,18 +71,20 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
 
     public static PropertyDemand createPropertyDemand(PropertyDemandRequest propertyDemandRequest) {
         return PropertyDemand.builder()
-                .contractType(ContractTypeEnum.valueOf(propertyDemandRequest.getContract_type()))
-                .propertyType(PropertyTypeEnum.valueOf(propertyDemandRequest.getProperty_type()))
-                .bedroomsNumber(BedroomsNumberEnum.valueOf(propertyDemandRequest.getBedrooms_number()))
-                .furnished(Boolean.parseBoolean(propertyDemandRequest.getFurnished()))
-                .petFriendly(Boolean.parseBoolean(propertyDemandRequest.getPet_friendly()))
-                .suggestedValueForRent(SuggestedValueForRentEnum.valueOf(propertyDemandRequest.getSuggested_value_for_rent()))
-                .suggestedValueForSale(StringUtils.isEmpty(propertyDemandRequest.getSuggested_value_for_sale())
+                .contractType(ContractTypeEnum.getByDescription(propertyDemandRequest.getContractType()))
+                .propertyType(PropertyTypeEnum.getByDescription(propertyDemandRequest.getPropertyType()))
+                .bedroomsNumber(BedroomsNumberEnum.getByDescription(propertyDemandRequest.getBedroomsNumber()))
+                .furnished(Objects.equals(propertyDemandRequest.getFurnished(), "Sim"))
+                .petFriendly(Objects.equals(propertyDemandRequest.getPetFriendly(), "Sim"))
+                .suggestedValueForRent(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForRent())
                         ? null
-                        : SuggestedValueForSaleEnum.valueOf(propertyDemandRequest.getSuggested_value_for_sale()))
-                .suggestedValueForSeasonal(StringUtils.isEmpty(propertyDemandRequest.getSuggested_value_for_seasonal())
+                        : SuggestedValueForRentEnum.getByDescription(propertyDemandRequest.getSuggestedValueForRent()))
+                .suggestedValueForSale(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForSale())
                         ? null
-                        : SuggestedValueForSeasonalEnum.valueOf(propertyDemandRequest.getSuggested_value_for_seasonal()))
+                        : SuggestedValueForSaleEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSale()))
+                .suggestedValueForSeasonal(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForSeasonal())
+                        ? null
+                        : SuggestedValueForSeasonalEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSeasonal()))
                 .build();
     }
 }

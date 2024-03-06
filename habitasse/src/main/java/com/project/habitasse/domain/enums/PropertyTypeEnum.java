@@ -18,6 +18,15 @@ public enum PropertyTypeEnum {
         this.desciption = desciption;
     }
 
+    public static PropertyTypeEnum getByDescription(String description) {
+        for (PropertyTypeEnum propertyType : values()) {
+            if (propertyType.getDesciption().equals(description)) {
+                return propertyType;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant found with description: " + description);
+    }
+
     public boolean isHouse() {
         return this.equals(HOUSE);
     }

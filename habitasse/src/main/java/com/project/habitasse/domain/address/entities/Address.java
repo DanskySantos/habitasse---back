@@ -33,7 +33,7 @@ public class Address extends SuperclassEntity implements Serializable {
 
     public static Address createAddress(PropertyDemandRequest propertyDemandRequest) {
         return Address.builder()
-                .country(propertyDemandRequest.getCountry())
+                .country("Brasil")
                 .state(propertyDemandRequest.getState())
                 .city(propertyDemandRequest.getCity())
                 .build();

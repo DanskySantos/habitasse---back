@@ -25,7 +25,7 @@ create table if not exists tb_demand
     update_date             timestamp,
     uuid                    varchar(255),
     property_demand_id      bigint,
-    comments                varchar(255),
+    annotation              varchar(255),
     contact                 varchar(255),
     primary key (id)
 );

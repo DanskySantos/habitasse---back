@@ -20,6 +20,15 @@ public enum BedroomsNumberEnum {
         this.value = value;
     }
 
+    public static BedroomsNumberEnum getByDescription(String description) {
+        for (BedroomsNumberEnum bedroomsNumber : values()) {
+            if (bedroomsNumber.getDesciption().equals(description)) {
+                return bedroomsNumber;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant found with description: " + description);
+    }
+
     public boolean isOne() {
         return this.equals(ONE);
     }

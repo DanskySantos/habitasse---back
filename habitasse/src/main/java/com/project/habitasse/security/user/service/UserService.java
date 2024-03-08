@@ -23,6 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -38,6 +39,7 @@ public class UserService implements UserDetailsService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthenticationResponse register(RegisterRequest registerRequest) throws Exception {
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequest.getPassword());
@@ -160,6 +162,23 @@ public class UserService implements UserDetailsService {
                 user.setPerson(updateUser.getPerson());
         return userRepository.save(user);
     }
+
+
+    public Optional<User> updateUserPassword(String username, String currentPassword, String newPassword) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (passwordEncoder.matches(currentPassword, user.getPassword())) {
+                user.setPassword(newPassword);
+                userRepository.save(user);
+                return Optional.of(user);
+            } else {
+                throw new IncorrectPasswordException("A senha atual está incorreta");
+            }
+        }
+        return Optional.empty();
+    }
+
     @Override
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email).get();

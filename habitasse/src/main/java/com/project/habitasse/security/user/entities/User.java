@@ -4,7 +4,9 @@ import com.project.habitasse.domain.common.SuperclassEntity;
 import com.project.habitasse.domain.offer.entities.Offer;
 import com.project.habitasse.security.person.entities.Person;
 import com.project.habitasse.security.roles.entity.Role;
+import com.project.habitasse.security.user.entities.request.GetUserRequest;
 import com.project.habitasse.security.user.entities.request.RegisterRequest;
+import com.project.habitasse.security.user.entities.request.UpdateUserPasswordRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +16,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -98,6 +99,14 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
                 .password(registerRequest.getPassword())
                 .email(registerRequest.getEmail())
                 .role(registerRequest.getUserRoles())
+                .build();
+    }
+
+    public static User UpdateUser(GetUserRequest getUserRequest){
+        return User.builder()
+                .email(getUserRequest.getEmail())
+                .username(getUserRequest.getPassword())
+                .password(getUserRequest.getPassword())
                 .build();
     }
 }

@@ -39,7 +39,8 @@ public class UserService implements UserDetailsService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordSeach;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public AuthenticationResponse register(RegisterRequest registerRequest) throws Exception {
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequest.getPassword());
@@ -169,7 +170,8 @@ public class UserService implements UserDetailsService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (passwordEncoder.matches(currentPassword, user.getPassword())) {
-                user.setPassword(newPassword);
+                String encryptedPassword = passwordEncoder.encode(newPassword);
+                user.setPassword(encryptedPassword);
                 userRepository.save(user);
                 return Optional.of(user);
             } else {

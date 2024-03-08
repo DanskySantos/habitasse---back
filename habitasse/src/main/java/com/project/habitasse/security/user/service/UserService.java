@@ -10,13 +10,14 @@ import com.project.habitasse.security.token.tokenEnum.TokenType;
 import com.project.habitasse.security.user.entities.User;
 import com.project.habitasse.security.user.entities.request.AuthenticationRequest;
 import com.project.habitasse.security.user.entities.request.RegisterRequest;
+import com.project.habitasse.security.user.entities.request.UserRequest;
 import com.project.habitasse.security.user.entities.response.AuthenticationResponse;
+import com.project.habitasse.security.user.entities.response.UserResponse;
 import com.project.habitasse.security.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.action.internal.EntityActionVetoException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,7 +43,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordSeach;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public AuthenticationResponse register(RegisterRequest registerRequest) throws Exception {
+    public AuthenticationResponse register(RegisterRequest registerRequest) {
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequest.getPassword());
         registerRequest.setPassword(encryptedPassword);
 
@@ -146,24 +147,26 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
-    public Optional<User> findByTokenEmail(String token) {
-        return userRepository.findByEmail(jwtService.getEmail(token));
+    public UserResponse findByTokenEmail(String token) {
+        var asd = userRepository.findByEmail(jwtService.getEmail(token));
+
+        return UserResponse.mapEntityToResponse(asd.get());
     }
 
     public Optional<User> findByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
     }
 
-   public User updateUser(Long id, User updateUser){
+    public User updateUser(Long id, UserRequest updateUser) {
         User user = userRepository.findById(id)
-                              .orElseThrow(() -> new EntityNotFoundException("Usuário não encotrado com esse id: " + id));
-                user.setEmail(updateUser.getEmail());
-                user.setUsername(updateUser.getUsername());
-                user.setPassword(updateUser.getPassword());
-                user.setPerson(updateUser.getPerson());
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encotrado com esse id: " + id));
+        user.setEmail(updateUser.getEmail());
+        user.setUsername(updateUser.getUsername());
+        user.setPassword(updateUser.getPassword());
+//        user.setPerson(updateUser.getPerson());
+// setar as propriedades do person
         return userRepository.save(user);
     }
-
 
     public Optional<User> updateUserPassword(String username, String currentPassword, String newPassword) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
@@ -175,7 +178,7 @@ public class UserService implements UserDetailsService {
                 userRepository.save(user);
                 return Optional.of(user);
             } else {
-                throw new IncorrectPasswordException("A senha atual está incorreta");
+                throw new IllegalArgumentException("A senha atual está incorreta");
             }
         }
         return Optional.empty();

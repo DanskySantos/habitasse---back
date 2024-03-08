@@ -4,9 +4,7 @@ import com.project.habitasse.domain.common.SuperclassEntity;
 import com.project.habitasse.domain.offer.entities.Offer;
 import com.project.habitasse.security.person.entities.Person;
 import com.project.habitasse.security.roles.entity.Role;
-import com.project.habitasse.security.user.entities.request.GetUserRequest;
 import com.project.habitasse.security.user.entities.request.RegisterRequest;
-import com.project.habitasse.security.user.entities.request.UpdateUserPasswordRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -102,11 +100,11 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
                 .build();
     }
 
-    public static User UpdateUser(GetUserRequest getUserRequest){
-        return User.builder()
-                .email(getUserRequest.getEmail())
-                .username(getUserRequest.getPassword())
-                .password(getUserRequest.getPassword())
-                .build();
-    }
+//    public static User updateUser(GetUserRequest getUserRequest) {
+//        return User.builder()
+//                .email(getUserRequest.getEmail())
+//                .username(getUserRequest.getPassword())
+//                .password(getUserRequest.getPassword())
+//                .build();
+//    }
 }

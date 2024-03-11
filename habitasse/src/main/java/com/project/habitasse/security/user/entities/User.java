@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -100,7 +101,7 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
                 .username(registerRequest.getUsername())
                 .password(registerRequest.getPassword())
                 .email(registerRequest.getEmail())
-                .role(registerRequest.getUserRoles())
+                .role(Objects.equals(registerRequest.getUserRoles(), "Corretor") ? Role.USER_CO : Role.USER_CD)
                 .build();
     }
 

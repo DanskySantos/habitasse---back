@@ -32,6 +32,9 @@ public class UserController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserRequest updatedUser) {
+        if (id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário não encotrado com esse id");
+
         return ResponseEntity.ok(userService.updateUser(id, updatedUser));
     }
 

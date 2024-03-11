@@ -158,14 +158,9 @@ public class UserService implements UserDetailsService {
     }
 
     public User updateUser(Long id, UserRequest updateUser) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encotrado com esse id: " + id));
-        user.setEmail(updateUser.getEmail());
-        user.setUsername(updateUser.getUsername());
-        user.setPassword(updateUser.getPassword());
-//        user.setPerson(updateUser.getPerson());
-// setar as propriedades do person
-        return userRepository.save(user);
+        User user = userRepository.findById(id).get();
+
+        return userRepository.save(User.updateUser(user, updateUser));
     }
 
     public Optional<User> updateUserPassword(String username, String currentPassword, String newPassword) {

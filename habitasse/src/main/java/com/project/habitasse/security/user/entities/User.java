@@ -5,6 +5,8 @@ import com.project.habitasse.domain.offer.entities.Offer;
 import com.project.habitasse.security.person.entities.Person;
 import com.project.habitasse.security.roles.entity.Role;
 import com.project.habitasse.security.user.entities.request.RegisterRequest;
+import com.project.habitasse.security.user.entities.request.UserRequest;
+import com.project.habitasse.utils.Utils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,9 +14,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -100,11 +104,17 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
                 .build();
     }
 
-//    public static User updateUser(GetUserRequest getUserRequest) {
-//        return User.builder()
-//                .email(getUserRequest.getEmail())
-//                .username(getUserRequest.getPassword())
-//                .password(getUserRequest.getPassword())
-//                .build();
-//    }
+    public static User updateUser(User user, UserRequest userRequest) {
+        Date birthday = null;
+        if (userRequest.getBirthday() != null && StringUtils.hasText(userRequest.getBirthday()))
+            birthday = Utils.dateToSave(userRequest.getBirthday());
+
+        user.setUsername(userRequest.getUsername());
+        user.setEmail(userRequest.getEmail());
+        user.person.setBirthday(birthday);
+        user.person.setPhone(StringUtils.isEmpty(userRequest.getPhone()) ? null : userRequest.getPhone());
+        user.person.setName(userRequest.getName());
+
+        return user;
+    }
 }

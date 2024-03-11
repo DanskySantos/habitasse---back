@@ -41,7 +41,7 @@ public class UserController {
     @PutMapping("/password/{username}")
     public ResponseEntity<?> updateUserPassword(@PathVariable String username, @RequestBody UpdateUserPasswordRequest updateUserPasswordRequest) {
         try {
-            return ResponseEntity.ok(userService.updateUserPassword(username, updateUserPasswordRequest.getCurrentPassword(), updateUserPasswordRequest.getNewPassword()));
+            return ResponseEntity.ok(userService.updateUserPassword(username, updateUserPasswordRequest));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A senha atual está incorreta");
         }

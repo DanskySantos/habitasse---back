@@ -10,6 +10,7 @@ import com.project.habitasse.security.token.tokenEnum.TokenType;
 import com.project.habitasse.security.user.entities.User;
 import com.project.habitasse.security.user.entities.request.AuthenticationRequest;
 import com.project.habitasse.security.user.entities.request.RegisterRequest;
+import com.project.habitasse.security.user.entities.request.UpdateUserPasswordRequest;
 import com.project.habitasse.security.user.entities.request.UserRequest;
 import com.project.habitasse.security.user.entities.response.AuthenticationResponse;
 import com.project.habitasse.security.user.entities.response.UserResponse;
@@ -163,18 +164,14 @@ public class UserService implements UserDetailsService {
         return userRepository.save(User.updateUser(user, updateUser));
     }
 
-    public Optional<User> updateUserPassword(String username, String currentPassword, String newPassword) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (passwordEncoder.matches(currentPassword, user.getPassword())) {
-                String encryptedPassword = passwordEncoder.encode(newPassword);
-                user.setPassword(encryptedPassword);
-                userRepository.save(user);
-                return Optional.of(user);
-            } else {
-                throw new IllegalArgumentException("A senha atual está incorreta");
-            }
+    public Optional<User> updateUserPassword(String email, UpdateUserPasswordRequest updateUserPasswordRequest) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        String encryptedPassword = passwordEncoder.encode(updateUserPasswordRequest.getNewPassword());
+
+        if (passwordEncoder.matches(updateUserPasswordRequest.getCurrentPassword(), user.getPassword())) {
+            userRepository.save(User.updatePassword(user, encryptedPassword));
+        } else {
+            throw new IllegalArgumentException("A senha atual está incorreta");
         }
         return Optional.empty();
     }

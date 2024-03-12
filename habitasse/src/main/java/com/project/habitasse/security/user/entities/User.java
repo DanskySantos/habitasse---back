@@ -120,16 +120,7 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
     }
 
     public static User updatePassword(User user, String newPassword) {
-        Date birthday = null;
-        if (userRequest.getBirthday() != null && StringUtils.hasText(userRequest.getBirthday()))
-            birthday = Utils.dateToSave(userRequest.getBirthday());
-
-        user.setUsername(userRequest.getUsername());
-        user.setEmail(userRequest.getEmail());
-        user.person.setBirthday(birthday);
-        user.person.setPhone(StringUtils.isEmpty(userRequest.getPhone()) ? null : userRequest.getPhone());
-        user.person.setName(userRequest.getName());
-
+        user.setPassword(newPassword);
         return user;
     }
 }

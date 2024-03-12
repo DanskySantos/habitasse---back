@@ -164,8 +164,8 @@ public class UserService implements UserDetailsService {
         return userRepository.save(User.updateUser(user, updateUser));
     }
 
-    public Optional<User> updateUserPassword(String email, UpdateUserPasswordRequest updateUserPasswordRequest) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+    public Optional<User> updateUserPassword(Long id, UpdateUserPasswordRequest updateUserPasswordRequest) {
+        User user = userRepository.findById(id).orElseThrow();
         String encryptedPassword = passwordEncoder.encode(updateUserPasswordRequest.getNewPassword());
 
         if (passwordEncoder.matches(updateUserPasswordRequest.getCurrentPassword(), user.getPassword())) {
@@ -180,4 +180,5 @@ public class UserService implements UserDetailsService {
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email).get();
     }
+
 }

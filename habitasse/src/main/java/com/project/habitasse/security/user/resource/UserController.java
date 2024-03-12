@@ -38,12 +38,11 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(id, updatedUser));
     }
 
-    @PutMapping("/password/{username}")
-    public ResponseEntity<?> updateUserPassword(@PathVariable String username, @RequestBody UpdateUserPasswordRequest updateUserPasswordRequest) {
-        try {
-            return ResponseEntity.ok(userService.updateUserPassword(username, updateUserPasswordRequest));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A senha atual está incorreta");
-        }
+    @PutMapping("/password/{id}")
+    public ResponseEntity<?> updateUserPassword(@PathVariable Long id, @RequestBody UpdateUserPasswordRequest updateUserPasswordRequest) {
+        if(id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário não encotrado com esse id");
+
+        return ResponseEntity.ok(userService.updateUserPassword(id, updateUserPasswordRequest));
     }
 }

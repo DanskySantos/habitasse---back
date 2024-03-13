@@ -5,6 +5,7 @@ import com.project.habitasse.domain.enums.*;
 import com.project.habitasse.domain.offer.entities.Offer;
 import com.project.habitasse.domain.propertyDemand.entities.PropertyDemand;
 import com.project.habitasse.domain.propertyDemand.entities.request.PropertyDemandRequest;
+import com.project.habitasse.security.user.entities.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,11 +37,16 @@ public class Demand extends SuperclassEntity implements Serializable {
     @OneToMany(mappedBy = "demand", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Offer> offers;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
+
     public static Demand createDemand(PropertyDemandRequest propertyDemandRequest) {
         return Demand.builder()
                 .propertyDemand(propertyDemandRequest.getPropertyDemand())
                 .annotation(propertyDemandRequest.getAnnotation() != null ? propertyDemandRequest.getAnnotation() : "")
                 .contact(propertyDemandRequest.getContact() != null ? propertyDemandRequest.getContact() : "")
+                .user(propertyDemandRequest.getPropertyDemand().getUser())
                 .build();
     }
 }

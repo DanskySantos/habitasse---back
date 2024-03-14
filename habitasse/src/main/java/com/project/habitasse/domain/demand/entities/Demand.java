@@ -41,6 +41,9 @@ public class Demand extends SuperclassEntity implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
+    @Column(name = "is_deleted")
+    private boolean isdeleted = false;
+
     public static Demand createDemand(PropertyDemandRequest propertyDemandRequest) {
         return Demand.builder()
                 .propertyDemand(propertyDemandRequest.getPropertyDemand())
@@ -48,5 +51,10 @@ public class Demand extends SuperclassEntity implements Serializable {
                 .contact(propertyDemandRequest.getContact() != null ? propertyDemandRequest.getContact() : "")
                 .user(propertyDemandRequest.getPropertyDemand().getUser())
                 .build();
+    }
+
+    public static Demand delete(Demand demand){
+        demand.setIsdeleted(true);
+        return demand;
     }
 }

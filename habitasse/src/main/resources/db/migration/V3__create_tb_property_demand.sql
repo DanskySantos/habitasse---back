@@ -15,6 +15,7 @@ create table if not exists tb_property_demand
     demand_id                       bigint,
     address_id                      bigint,
     user_id                         bigint,
+    is_deleted                      boolean default false,
     primary key (id)
 );
 
@@ -28,6 +29,7 @@ create table if not exists tb_demand
     user_id                 bigint,
     annotation              varchar(255),
     contact                 varchar(255),
+    is_deleted              boolean default false,
     primary key (id)
 );
 

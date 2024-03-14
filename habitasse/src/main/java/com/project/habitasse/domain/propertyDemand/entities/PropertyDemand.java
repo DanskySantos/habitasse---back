@@ -69,6 +69,9 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
+    @Column(name = "is_deleted")
+    private boolean isdeleted = false;
+
     public static PropertyDemand createPropertyDemand(PropertyDemandRequest propertyDemandRequest) {
         return PropertyDemand.builder()
                 .contractType(ContractTypeEnum.getByDescription(propertyDemandRequest.getContractType()))
@@ -86,5 +89,10 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
                         ? null
                         : SuggestedValueForSeasonalEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSeasonal()))
                 .build();
+    }
+
+    public static PropertyDemand delete(PropertyDemand propertyDemand){
+        propertyDemand.setIsdeleted(true);
+        return propertyDemand;
     }
 }

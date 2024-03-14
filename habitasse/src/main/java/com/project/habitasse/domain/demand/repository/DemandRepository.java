@@ -13,6 +13,6 @@ import java.util.Optional;
 @Repository
 public interface DemandRepository extends JpaRepository<Demand, Long> {
 
-    @Query(value = "SELECT * FROM tb_demand WHERE user_id = :userId", nativeQuery = true)
+    @Query(value = "SELECT * FROM tb_demand WHERE user_id = :userId AND is_deleted = false", nativeQuery = true)
     Optional<List<Demand>> getByUserEmail(@Param("userId") Integer userId);
 }

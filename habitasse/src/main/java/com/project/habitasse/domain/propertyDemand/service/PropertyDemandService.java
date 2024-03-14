@@ -8,9 +8,14 @@ import com.project.habitasse.domain.propertyDemand.entities.PropertyDemand;
 import com.project.habitasse.domain.propertyDemand.entities.request.PropertyDemandRequest;
 import com.project.habitasse.domain.propertyDemand.repository.PropertyDemandRepository;
 import com.project.habitasse.security.service.JwtService;
+import com.project.habitasse.security.user.entities.User;
+import com.project.habitasse.security.user.entities.request.UserRequest;
 import com.project.habitasse.security.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,4 +49,25 @@ public class PropertyDemandService {
 //    public Optional<List<PropertyDemand>> findByEmail(String email) {
 //        return propertyDemandRepository.findAllByEmail(email);
 //    }
+
+    public User updatePropertyDemand(Long id, UserRequest updateUser) {
+        User user = userRepository.findById(id).get();
+
+        return userRepository.save(User.updateUser(user, updateUser));
+    }
+
+    public void deleteById(Integer propertyId, Integer demandId) {
+        PropertyDemand propertyDemand = new PropertyDemand();
+        Demand demand = new Demand();
+
+        if(propertyId != null)
+            propertyDemand = propertyDemandRepository.findById(Long.valueOf(propertyId)).get();
+        if(demandId != null)
+            demand = demandRepository.findById(Long.valueOf(demandId)).get();
+
+        Demand.delete(demand);
+        PropertyDemand.delete(propertyDemand);
+        propertyDemandRepository.save(propertyDemand);
+        demandRepository.save(demand);
+    }
 }

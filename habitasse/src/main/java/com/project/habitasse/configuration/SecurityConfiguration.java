@@ -4,12 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -17,7 +14,6 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 
 import static com.project.habitasse.security.roles.entity.Permission.*;
-import static com.project.habitasse.security.roles.entity.Role.ADMIN;
 import static com.project.habitasse.security.roles.entity.Role.USER_CD;
 import static com.project.habitasse.security.roles.entity.Role.USER_CO;
 import static org.springframework.http.HttpMethod.*;
@@ -53,7 +49,7 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
 //                    config.addAllowedOrigin("http://localhost:4200");
-                    config.addAllowedOrigin("https://habitasse.netlify.app");
+                    config.addAllowedOrigin("*");
                     config.addAllowedHeader("*");
                     config.addAllowedMethod("*");
                     return config;
@@ -62,16 +58,16 @@ public class SecurityConfiguration {
 //                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL).permitAll()
-                                .requestMatchers("/api/v1/management/**").hasAnyRole(USER_CO.name(), USER_CD.name())
-                                .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(USER_READ.name(), USER_CD.name())
-                                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(USER_CREATE.name(), USER_CD.name())
-                                .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(USER_UPDATE.name(), USER_CD.name())
-                                .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(USER_DELETE.name(), USER_CD.name())
+                                .requestMatchers("/api/v1/management/**" ).hasAnyRole(USER_CO.name(), USER_CD.name())
+                                .requestMatchers(GET, "/api/v1/management/**" ).hasAnyAuthority(USER_READ.name(), USER_CD.name())
+                                .requestMatchers(POST, "/api/v1/management/**" ).hasAnyAuthority(USER_CREATE.name(), USER_CD.name())
+                                .requestMatchers(PUT, "/api/v1/management/**" ).hasAnyAuthority(USER_UPDATE.name(), USER_CD.name())
+                                .requestMatchers(DELETE, "/api/v1/management/**" ).hasAnyAuthority(USER_DELETE.name(), USER_CD.name())
 
-                                .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(USER_READ.name(), USER_CO.name())
-                                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(USER_CREATE.name(), USER_CO.name())
-                                .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(USER_UPDATE.name(), USER_CO.name())
-                                .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(USER_DELETE.name(), USER_CO.name())
+                                .requestMatchers(GET, "/api/v1/management/**" ).hasAnyAuthority(USER_READ.name(), USER_CO.name())
+                                .requestMatchers(POST, "/api/v1/management/**" ).hasAnyAuthority(USER_CREATE.name(), USER_CO.name())
+                                .requestMatchers(PUT, "/api/v1/management/**" ).hasAnyAuthority(USER_UPDATE.name(), USER_CO.name())
+                                .requestMatchers(DELETE, "/api/v1/management/**" ).hasAnyAuthority(USER_DELETE.name(), USER_CO.name())
                                 .anyRequest()
                                 .authenticated()
                 )
@@ -79,7 +75,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout ->
-                        logout.logoutUrl("/api/v1/auth/logout")
+                        logout.logoutUrl("/api/v1/auth/logout" )
                                 .addLogoutHandler(logoutHandler)
                                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                 )

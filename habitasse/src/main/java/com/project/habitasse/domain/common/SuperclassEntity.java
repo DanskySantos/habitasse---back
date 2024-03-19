@@ -1,5 +1,6 @@
 package com.project.habitasse.domain.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -25,9 +26,11 @@ public class SuperclassEntity implements Serializable {
     private String uuid = UUID.randomUUID().toString();
 
     @Column(name = "creation_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime creationDate;
 
     @Column(name = "update_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateDate;
 
     @PrePersist

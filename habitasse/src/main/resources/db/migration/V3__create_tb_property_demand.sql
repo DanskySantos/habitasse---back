@@ -36,7 +36,7 @@ create table tb_demand
 alter table tb_demand
     add constraint UK_86cal5mg9j0t8j9yn28n9iurt unique (uuid);
 alter table tb_demand
-    add constraint FK349pmtlc4ukgn1so04k2ls4kk foreign key (property_demand_id) references tb_property_demand;
+    add constraint FK349pmtlc4ukgn1so04k2ls444 foreign key (property_demand_id) references tb_property_demand;
 
 alter table tb_property_demand
     add constraint UK_86cal5mg9j0t8j9yn28n9iuss unique (uuid);

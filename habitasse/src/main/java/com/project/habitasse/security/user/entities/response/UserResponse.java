@@ -2,10 +2,7 @@ package com.project.habitasse.security.user.entities.response;
 
 import com.project.habitasse.domain.offer.entities.Offer;
 import com.project.habitasse.security.person.entities.Person;
-import com.project.habitasse.security.roles.entity.Role;
 import com.project.habitasse.security.user.entities.User;
-import com.project.habitasse.security.user.entities.request.RegisterRequest;
-import jdk.jshell.Snippet;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

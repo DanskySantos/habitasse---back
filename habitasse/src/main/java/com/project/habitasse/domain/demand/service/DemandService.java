@@ -17,12 +17,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DemandService {
 
-
     private final DemandRepository demandRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
 
     public Page<Demand> getByUserEmail(String token, Pageable pageable) {
+        User user = userRepository.findByEmail(jwtService.getEmail(token)).orElseThrow();
+
+        return demandRepository.getByUserEmail(user.getId(), pageable);
+    }
+
+    public Page<Demand> getAll(String token, Pageable pageable) {
         User user = userRepository.findByEmail(jwtService.getEmail(token)).orElseThrow();
 
         return demandRepository.getByUserEmail(user.getId(), pageable);

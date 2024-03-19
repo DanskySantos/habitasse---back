@@ -23,16 +23,6 @@ public class PropertyDemandController {
         return ResponseEntity.ok(propertyDemandService.registerDemand(propertyDemandRequest, request.getHeader("Authorization")));
     }
 
-//    @GetMapping("/findByEmail/{email}")
-//    public ResponseEntity<List<PropertyDemand>> findByEmail(@PathVariable String email) {
-//        Optional<List<PropertyDemand>> propertyDemands = propertyDemandService.findByEmail(email);
-//        if (propertyDemands.isPresent()) {
-//            return new ResponseEntity<>(propertyDemands.get(), HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-
     @DeleteMapping("/delete/{propertyId}/{demandId}")
     public ResponseEntity<?> deletePropertyDemand(@PathVariable("propertyId") Integer propertyId,
                                                   @PathVariable("demandId") Integer demandId) {

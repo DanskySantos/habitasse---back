@@ -30,15 +30,16 @@ public class DemandController {
         return ResponseEntity.ok(demandService.getByUserEmail(request.getHeader("Authorization"), paging));
     }
 
-    //    @GetMapping("/findByEmail/{email}")
-//    public ResponseEntity<List<PropertyDemand>> findByEmail(@PathVariable String email) {
-//        Optional<List<PropertyDemand>> propertyDemands = propertyDemandService.findByEmail(email);
-//        if (propertyDemands.isPresent()) {
-//            return new ResponseEntity<>(propertyDemands.get(), HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @GetMapping("/findAll/{page}/{size}")
+    public ResponseEntity<?> getAll(HttpServletRequest request,
+                                               @PathVariable Integer page,
+                                               @PathVariable Integer size) {
+        if (request.getHeader("Authorization") == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro inesperado");
+
+        Pageable paging = PageRequest.of(page, size);
+        return ResponseEntity.ok(demandService.getAll(request.getHeader("Authorization"), paging));
+    }
 
 }
 

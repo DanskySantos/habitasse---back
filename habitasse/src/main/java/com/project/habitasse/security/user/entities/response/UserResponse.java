@@ -49,5 +49,4 @@ public class UserResponse {
                 .role(user.getRole().name())
                 .build();
     }
-
 }

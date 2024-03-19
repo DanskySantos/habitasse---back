@@ -1,5 +1,6 @@
 package com.project.habitasse.security.person.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.habitasse.domain.common.SuperclassEntity;
 import com.project.habitasse.security.user.entities.request.RegisterRequest;
 import com.project.habitasse.utils.Utils;
@@ -27,6 +28,7 @@ public class Person extends SuperclassEntity implements Serializable {
     private String name;
 
     @Column(name = "birthday", length = 255)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     @Column(name = "phone", length = 255)

@@ -1,7 +1,9 @@
 package com.project.habitasse.domain.propertyDemand.resource;
 
+import com.project.habitasse.domain.propertyDemand.entities.PropertyDemand;
 import com.project.habitasse.domain.propertyDemand.entities.request.PropertyDemandRequest;
 import com.project.habitasse.domain.propertyDemand.service.PropertyDemandService;
+import com.project.habitasse.security.user.entities.request.UserRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,17 @@ public class PropertyDemandController {
 
         propertyDemandService.deleteById(propertyId, demandId);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updatePropertyDemand(@PathVariable Long id, @RequestBody PropertyDemandRequest propertyDemandRequest) {
+        if (propertyDemandRequest == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Dados inválidos");
+
+        if (id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID inválido");
+
+        return ResponseEntity.ok(propertyDemandService.updatePropertyDemand(id, propertyDemandRequest));
     }
 }
 

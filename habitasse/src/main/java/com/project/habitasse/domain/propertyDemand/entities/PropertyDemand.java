@@ -7,6 +7,8 @@ import com.project.habitasse.domain.demand.entities.Demand;
 import com.project.habitasse.domain.enums.*;
 import com.project.habitasse.domain.propertyDemand.entities.request.PropertyDemandRequest;
 import com.project.habitasse.security.user.entities.User;
+import com.project.habitasse.security.user.entities.request.UserRequest;
+import com.project.habitasse.utils.Utils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +17,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 @Data
@@ -93,6 +96,21 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
 
     public static PropertyDemand delete(PropertyDemand propertyDemand){
         propertyDemand.setIsdeleted(true);
+        return propertyDemand;
+    }
+
+    public static PropertyDemand updateDemand(PropertyDemand propertyDemand, PropertyDemandRequest propertyDemandRequest){
+        propertyDemand.setContractType(ContractTypeEnum.valueOf(propertyDemandRequest.getContractType()));
+        propertyDemand.setPropertyType(PropertyTypeEnum.valueOf(propertyDemandRequest.getPropertyType()));
+        propertyDemand.setBedroomsNumber(BedroomsNumberEnum.valueOf(propertyDemandRequest.getBedroomsNumber()));
+        propertyDemand.setFurnished(Boolean.parseBoolean(propertyDemandRequest.getFurnished()));
+        propertyDemand.setPetFriendly(Boolean.parseBoolean(propertyDemandRequest.getPetFriendly()));
+        propertyDemand.setSuggestedValueForRent(SuggestedValueForRentEnum.valueOf(propertyDemandRequest.getSuggestedValueForRent()));
+        propertyDemand.setSuggestedValueForSale(SuggestedValueForSaleEnum.valueOf(propertyDemandRequest.getSuggestedValueForSale()));
+        propertyDemand.setSuggestedValueForSeasonal(SuggestedValueForSeasonalEnum.valueOf(propertyDemandRequest.getSuggestedValueForSeasonal()));
+        propertyDemand.demand.setAnnotation(propertyDemandRequest.getAnnotation());
+        propertyDemand.address.setState(propertyDemandRequest.getState());
+        propertyDemand.address.setCity(propertyDemandRequest.getCity());
         return propertyDemand;
     }
 }

@@ -105,20 +105,15 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
         propertyDemand.setBedroomsNumber(BedroomsNumberEnum.getByDescription(propertyDemandRequest.getBedroomsNumber()));
         propertyDemand.setFurnished(Boolean.parseBoolean(propertyDemandRequest.getFurnished()));
         propertyDemand.setPetFriendly(Boolean.parseBoolean(propertyDemandRequest.getPetFriendly()));
-
-        // Verifica se a descrição não é nula antes de chamar o método getByDescription
-        if (propertyDemandRequest.getSuggestedValueForRent() != null) {
-            propertyDemand.setSuggestedValueForRent(SuggestedValueForRentEnum.getByDescription(propertyDemandRequest.getSuggestedValueForRent()));
-        }
-
-        if (propertyDemandRequest.getSuggestedValueForSale() != null) {
-            propertyDemand.setSuggestedValueForSale(SuggestedValueForSaleEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSale()));
-        }
-
-        if (propertyDemandRequest.getSuggestedValueForSeasonal() != null) {
-            propertyDemand.setSuggestedValueForSeasonal(SuggestedValueForSeasonalEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSeasonal()));
-        }
-
+        propertyDemand.setSuggestedValueForRent(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForRent())
+                 ? null
+                 : SuggestedValueForRentEnum.getByDescription(propertyDemandRequest.getSuggestedValueForRent()));
+        propertyDemand.setSuggestedValueForSale(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForSale())
+                 ? null
+                 : SuggestedValueForSaleEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSale()));
+        propertyDemand.setSuggestedValueForSeasonal(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForSeasonal())
+                 ? null
+                 : SuggestedValueForSeasonalEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSeasonal()));
         propertyDemand.demand.setAnnotation(propertyDemandRequest.getAnnotation());
         propertyDemand.address.setState(propertyDemandRequest.getState());
         propertyDemand.address.setCity(propertyDemandRequest.getCity());

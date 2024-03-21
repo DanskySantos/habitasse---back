@@ -15,17 +15,17 @@ public enum SuggestedValueForRentEnum {
     R$10K("R$ 10.000,00", 10000),
     R$15K("R$ 15.000,00", 15000);
 
-    private final String desciption;
+    private final String description;
     private final Integer value;
 
-    SuggestedValueForRentEnum(String desciption, Integer value) {
-        this.desciption = desciption;
+    SuggestedValueForRentEnum(String description, Integer value) {
+        this.description = description;
         this.value = value;
     }
 
     public static SuggestedValueForRentEnum getByDescription(String description) {
         for (SuggestedValueForRentEnum suggestedValueForRent : values()) {
-            if (suggestedValueForRent.getDesciption().equals(description)) {
+            if (suggestedValueForRent.getDescription().equalsIgnoreCase(description)) {
                 return suggestedValueForRent;
             }
         }

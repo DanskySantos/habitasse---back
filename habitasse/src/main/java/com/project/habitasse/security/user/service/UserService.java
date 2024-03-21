@@ -45,6 +45,14 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
+
+        String[] nameParts = registerRequest.getName().split("\\s+");
+        String firstName = nameParts[0];
+        String lastName = nameParts.length > 1 ? nameParts[1] : "";
+        String capitalizedFirstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1);
+        String username = capitalizedFirstName + " " + lastName.toLowerCase();
+        registerRequest.setUsername(username);
+
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequest.getPassword());
         registerRequest.setPassword(encryptedPassword);
 

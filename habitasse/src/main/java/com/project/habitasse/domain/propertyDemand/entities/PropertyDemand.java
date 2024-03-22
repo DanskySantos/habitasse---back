@@ -7,8 +7,6 @@ import com.project.habitasse.domain.demand.entities.Demand;
 import com.project.habitasse.domain.enums.*;
 import com.project.habitasse.domain.propertyDemand.entities.request.PropertyDemandRequest;
 import com.project.habitasse.security.user.entities.User;
-import com.project.habitasse.security.user.entities.request.UserRequest;
-import com.project.habitasse.utils.Utils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +15,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
 @Data
@@ -73,7 +70,7 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     private User user;
 
     @Column(name = "is_deleted")
-    private boolean isdeleted = false;
+    private boolean isDeleted = false;
 
     public static PropertyDemand createPropertyDemand(PropertyDemandRequest propertyDemandRequest) {
         return PropertyDemand.builder()
@@ -95,7 +92,7 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     }
 
     public static PropertyDemand delete(PropertyDemand propertyDemand){
-        propertyDemand.setIsdeleted(true);
+        propertyDemand.setDeleted(true);
         return propertyDemand;
     }
 

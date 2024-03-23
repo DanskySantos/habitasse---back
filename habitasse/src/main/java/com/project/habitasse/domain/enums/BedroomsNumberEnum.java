@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public enum BedroomsNumberEnum {
 
-    ONE("1", 1),
-    TWO("2", 2),
-    THREE("3", 3),
-    FOUR("4", 4),
-    FIVE_OR_MORE("5", 5);
+    ONE("Um quarto", 1),
+    TWO("Dois quartos", 2),
+    THREE("Três quartos", 3),
+    FOUR("Quatro quartos", 4),
+    FIVE_OR_MORE("Cinco ou mais quartos", 5);
 
     private final String desciption;
     private final Integer value;

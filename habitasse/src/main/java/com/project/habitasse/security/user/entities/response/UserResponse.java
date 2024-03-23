@@ -32,8 +32,9 @@ public class UserResponse {
     private Boolean enabled;
     private Boolean accountNonLocked;
     private Boolean accountNonExpired;
+    private Integer demandsQuantity;
 
-    public static UserResponse mapEntityToResponse(User user) {
+    public static UserResponse mapEntityToResponse(User user, Integer demandsQuantity) {
 
         return UserResponse.builder()
                 .username(user.getUsernameForDto())
@@ -44,6 +45,7 @@ public class UserResponse {
                 .birthday(user.getPerson().getBirthday() != null ? user.getPerson().getBirthday().toString() : null)
                 .phone(user.getPerson().getPhone())
                 .role(user.getRole().name())
+                .demandsQuantity(demandsQuantity > 0 ? demandsQuantity : 0)
                 .build();
     }
 }

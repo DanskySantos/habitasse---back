@@ -1,6 +1,7 @@
 package com.project.habitasse.security.user.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.habitasse.domain.propertyDemand.repository.PropertyDemandRepository;
 import com.project.habitasse.security.person.entities.Person;
 import com.project.habitasse.security.person.repository.PersonRepository;
 import com.project.habitasse.security.service.JwtService;
@@ -15,7 +16,6 @@ import com.project.habitasse.security.user.entities.request.UserRequest;
 import com.project.habitasse.security.user.entities.response.AuthenticationResponse;
 import com.project.habitasse.security.user.entities.response.UserResponse;
 import com.project.habitasse.security.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -41,11 +40,10 @@ public class UserService implements UserDetailsService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
-    private final PasswordEncoder passwordSeach;
+    private final PropertyDemandRepository propertyDemandRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
-
         createUsername(registerRequest);
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequest.getPassword());
         registerRequest.setPassword(encryptedPassword);
@@ -151,9 +149,10 @@ public class UserService implements UserDetailsService {
     }
 
     public UserResponse findByTokenEmail(String token) {
-        var asd = userRepository.findByEmail(jwtService.getEmail(token));
+        var user = userRepository.findByEmail(jwtService.getEmail(token));
+        var demandsQuantity = propertyDemandRepository.countByUser(user.get());
 
-        return UserResponse.mapEntityToResponse(asd.get());
+        return UserResponse.mapEntityToResponse(user.get(), demandsQuantity);
     }
 
     public Optional<User> findByUsername(String username) throws UsernameNotFoundException {
@@ -183,7 +182,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email).get();
     }
 
-    public void createUsername(RegisterRequest registerRequest){
+    public void createUsername(RegisterRequest registerRequest) {
         String[] nameParts = registerRequest.getName().split("\\s+");
         String firstName = nameParts[0];
         String lastName = nameParts.length > 1 ? nameParts[1] : "";

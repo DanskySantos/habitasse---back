@@ -12,9 +12,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
 public interface PropertyDemandRepository extends JpaRepository<PropertyDemand, Long> {
 
@@ -47,4 +44,7 @@ public interface PropertyDemandRepository extends JpaRepository<PropertyDemand, 
             @Param("city") String city,
             Pageable pageable
     );
+
+    @Query("SELECT COUNT(d) FROM Demand d WHERE d.user = :user")
+    Integer countByUser(@Param("user") User user);
 }

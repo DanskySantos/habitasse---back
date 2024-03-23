@@ -15,17 +15,17 @@ public enum SuggestedValueForSeasonalEnum {
     R$3000("R$ 3.000,00", 3000),
     R$5000("R$ 5.000,00", 5000);
 
-    private final String desciption;
+    private final String description;
     private final Integer value;
 
     SuggestedValueForSeasonalEnum(String desciption, Integer value) {
-        this.desciption = desciption;
+        this.description = desciption;
         this.value = value;
     }
 
     public static SuggestedValueForSeasonalEnum getByDescription(String description) {
         for (SuggestedValueForSeasonalEnum suggestedValueForSeasonal : values()) {
-            if (suggestedValueForSeasonal.getDesciption().equals(description)) {
+            if (suggestedValueForSeasonal.getDescription().equals(description)) {
                 return suggestedValueForSeasonal;
             }
         }

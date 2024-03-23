@@ -50,10 +50,10 @@ public class PropertyDemandService {
 //        return propertyDemandRepository.findAllByEmail(email);
 //    }
 
-    public User updatePropertyDemand(Long id, UserRequest updateUser) {
-        User user = userRepository.findById(id).get();
+    public PropertyDemand updatePropertyDemand(Long id, PropertyDemandRequest propertyDemandRequest) {
+        PropertyDemand propertyDemand = propertyDemandRepository.findById(id).get();
 
-        return userRepository.save(User.updateUser(user, updateUser));
+        return propertyDemandRepository.save(PropertyDemand.updateDemand(propertyDemand, propertyDemandRequest));
     }
 
     public void deleteById(Integer propertyId, Integer demandId) {

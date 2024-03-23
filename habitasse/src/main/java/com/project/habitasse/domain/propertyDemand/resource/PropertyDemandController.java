@@ -1,7 +1,9 @@
 package com.project.habitasse.domain.propertyDemand.resource;
 
+import com.project.habitasse.domain.propertyDemand.entities.PropertyDemand;
 import com.project.habitasse.domain.propertyDemand.entities.request.PropertyDemandRequest;
 import com.project.habitasse.domain.propertyDemand.service.PropertyDemandService;
+import com.project.habitasse.security.user.entities.request.UserRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,16 +25,6 @@ public class PropertyDemandController {
         return ResponseEntity.ok(propertyDemandService.registerDemand(propertyDemandRequest, request.getHeader("Authorization")));
     }
 
-//    @GetMapping("/findByEmail/{email}")
-//    public ResponseEntity<List<PropertyDemand>> findByEmail(@PathVariable String email) {
-//        Optional<List<PropertyDemand>> propertyDemands = propertyDemandService.findByEmail(email);
-//        if (propertyDemands.isPresent()) {
-//            return new ResponseEntity<>(propertyDemands.get(), HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-
     @DeleteMapping("/delete/{propertyId}/{demandId}")
     public ResponseEntity<?> deletePropertyDemand(@PathVariable("propertyId") Integer propertyId,
                                                   @PathVariable("demandId") Integer demandId) {
@@ -41,6 +33,17 @@ public class PropertyDemandController {
 
         propertyDemandService.deleteById(propertyId, demandId);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updatePropertyDemand(@PathVariable Long id, @RequestBody PropertyDemandRequest propertyDemandRequest) {
+        if (id == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID inválido");
+
+        if (propertyDemandRequest == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Dados inválidos");
+
+        return ResponseEntity.ok(propertyDemandService.updatePropertyDemand(id, propertyDemandRequest));
     }
 }
 

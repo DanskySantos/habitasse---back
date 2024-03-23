@@ -70,7 +70,7 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     private User user;
 
     @Column(name = "is_deleted")
-    private boolean isdeleted = false;
+    private boolean isDeleted = false;
 
     public static PropertyDemand createPropertyDemand(PropertyDemandRequest propertyDemandRequest) {
         return PropertyDemand.builder()
@@ -92,7 +92,28 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     }
 
     public static PropertyDemand delete(PropertyDemand propertyDemand){
-        propertyDemand.setIsdeleted(true);
+        propertyDemand.setDeleted(true);
+        return propertyDemand;
+    }
+
+    public static PropertyDemand updateDemand(PropertyDemand propertyDemand, PropertyDemandRequest propertyDemandRequest){
+        propertyDemand.setContractType(ContractTypeEnum.getByDescription(propertyDemandRequest.getContractType()));
+        propertyDemand.setPropertyType(PropertyTypeEnum.getByDescription(propertyDemandRequest.getPropertyType()));
+        propertyDemand.setBedroomsNumber(BedroomsNumberEnum.getByDescription(propertyDemandRequest.getBedroomsNumber()));
+        propertyDemand.setFurnished(Boolean.parseBoolean(propertyDemandRequest.getFurnished()));
+        propertyDemand.setPetFriendly(Boolean.parseBoolean(propertyDemandRequest.getPetFriendly()));
+        propertyDemand.setSuggestedValueForRent(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForRent())
+                 ? null
+                 : SuggestedValueForRentEnum.getByDescription(propertyDemandRequest.getSuggestedValueForRent()));
+        propertyDemand.setSuggestedValueForSale(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForSale())
+                 ? null
+                 : SuggestedValueForSaleEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSale()));
+        propertyDemand.setSuggestedValueForSeasonal(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForSeasonal())
+                 ? null
+                 : SuggestedValueForSeasonalEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSeasonal()));
+        propertyDemand.demand.setAnnotation(propertyDemandRequest.getAnnotation());
+        propertyDemand.address.setState(propertyDemandRequest.getState());
+        propertyDemand.address.setCity(propertyDemandRequest.getCity());
         return propertyDemand;
     }
 }

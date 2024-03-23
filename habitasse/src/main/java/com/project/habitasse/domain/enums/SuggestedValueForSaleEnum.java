@@ -17,17 +17,17 @@ public enum SuggestedValueForSaleEnum {
     R$15000K("R$ 15.000.000,00", 15000000),
     R$20000K("R$ 20.000.000,00", 20000000);
 
-    private final String desciption;
+    private final String description;
     private final Integer value;
 
     SuggestedValueForSaleEnum(String desciption, Integer value) {
-        this.desciption = desciption;
+        this.description = desciption;
         this.value = value;
     }
 
     public static SuggestedValueForSaleEnum getByDescription(String description) {
         for (SuggestedValueForSaleEnum suggestedValueForSale : values()) {
-            if (suggestedValueForSale.getDesciption().equals(description)) {
+            if (suggestedValueForSale.getDescription().equals(description)) {
                 return suggestedValueForSale;
             }
         }

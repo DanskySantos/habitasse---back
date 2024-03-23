@@ -10,15 +10,15 @@ public enum ContractTypeEnum {
     SALE("Venda"),
     SEASONAL("Temporada");
 
-    private final String desciption;
+    private final String description;
 
-    ContractTypeEnum(String desciption) {
-        this.desciption = desciption;
+    ContractTypeEnum(String description) {
+        this.description = description;
     }
 
     public static ContractTypeEnum getByDescription(String description) {
         for (ContractTypeEnum contractType : values()) {
-            if (contractType.getDesciption().equals(description)) {
+            if (contractType.getDescription().equals(description)) {
                 return contractType;
             }
         }

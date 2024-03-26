@@ -45,6 +45,6 @@ public interface PropertyDemandRepository extends JpaRepository<PropertyDemand, 
             Pageable pageable
     );
 
-    @Query("SELECT COUNT(d) FROM Demand d WHERE d.user = :user")
+    @Query("SELECT COUNT(d) FROM Demand d JOIN d.propertyDemand pd WHERE pd.isDeleted = false AND d.user = :user")
     Integer countByUser(@Param("user") User user);
 }

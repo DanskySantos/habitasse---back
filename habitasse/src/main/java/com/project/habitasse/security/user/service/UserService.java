@@ -57,7 +57,7 @@ public class UserService implements UserDetailsService {
         personSaved.setUserId(userSaved.getId());
         userSaved.setPerson(personSaved);
 
-        var jwtToken = jwtService.generateToken(userSaved);
+        var jwtToken = jwtService.generateTokenWithRole(userSaved);
         var refreshToken = jwtService.generateRefreshToken(userSaved);
         saveUserToken(userSaved, jwtToken);
         return AuthenticationResponse.builder()
@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
         );
 
         var user = userRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtService.generateTokenWithRole(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
@@ -122,7 +122,7 @@ public class UserService implements UserDetailsService {
             var user = this.userRepository.findByEmail(userEmail)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
-                var accessToken = jwtService.generateToken(user);
+                var accessToken = jwtService.generateTokenWithRole(user);
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
 

@@ -62,6 +62,7 @@ public class UserService implements UserDetailsService {
         saveUserToken(userSaved, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
+                .userId(userSaved.getId())
                 .userName(userSaved.getUsernameForDto())
                 .refreshToken(refreshToken)
                 .build();
@@ -82,6 +83,7 @@ public class UserService implements UserDetailsService {
         saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
+                .userId(user.getId())
                 .refreshToken(refreshToken)
                 .userName(user.getUsernameForDto())
                 .build();
@@ -138,7 +140,6 @@ public class UserService implements UserDetailsService {
     public List<User> findAllUser() {
         return userRepository.findAll();
     }
-
 
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);

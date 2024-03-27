@@ -5,7 +5,7 @@ create table tb_offer
     update_date             timestamp,
     uuid                    varchar(255),
     demand_id               bigint,
-    text                    varchar(255),
+    text                    varchar(2000),
     user_id                 bigint,
     primary key (id)
 );

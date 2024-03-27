@@ -43,7 +43,7 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Offer> offers;
 
     @Column(name = "role")

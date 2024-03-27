@@ -1,13 +1,18 @@
 package com.project.habitasse.domain.offer.service;
 
+import com.project.habitasse.domain.demand.entities.Demand;
 import com.project.habitasse.domain.demand.repository.DemandRepository;
 import com.project.habitasse.domain.offer.entities.Offer;
 import com.project.habitasse.domain.offer.entities.request.OfferRequest;
 import com.project.habitasse.domain.offer.repository.OfferRepository;
 import com.project.habitasse.security.service.JwtService;
+import com.project.habitasse.security.user.entities.User;
 import com.project.habitasse.security.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -18,13 +23,27 @@ public class OfferService {
     private final DemandRepository demandRepository;
     private final JwtService jwtService;
 
-    public Offer saveOffer(OfferRequest offerRequest, String token) {
-        offerRequest.setUser(userRepository.findByEmail(jwtService.getEmail(token)).orElseThrow());
-        offerRequest.setDemand(demandRepository.findById(offerRequest.getDemandId()).orElseThrow());
+    public Offer saveOffer(OfferRequest offerRequest, String token) throws Exception {
+        User user = userRepository.findByEmail(jwtService.getEmail(token)).orElseThrow();
+        Demand demand = demandRepository.findById(offerRequest.getDemandId()).orElseThrow();
+
+        if (demand.getOffers().stream().anyMatch(offer -> Objects.equals(offer.getUserId(), user.getId())))
+            throw new Exception("Já existe uma oferta cadastrada");
+
+        offerRequest.setUser(user);
+        offerRequest.setDemand(demand);
 
         Offer newOffer = Offer.createOffer(offerRequest);
 
         return offerRepository.save(newOffer);
+    }
+
+    public Offer updateOffer(Long id, OfferRequest offerRequest) throws Exception {
+        Offer offer = offerRepository.findById(id).orElseThrow();
+        if (StringUtils.isEmpty(offerRequest.getText()))
+            throw new Exception("O texto não pode ser nulo");
+
+        return offerRepository.save(Offer.updateOffer(offer, offerRequest));
     }
 
 //    public void deleteById(Integer propertyId, Integer demandId) {

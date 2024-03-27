@@ -30,16 +30,19 @@ public class Offer extends SuperclassEntity implements Serializable {
     @Column(name = "text", nullable=false)
     private String text;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
-    private User user;
+    @Column(name = "user_id")
+    private Integer userId;
 
     public static Offer createOffer(OfferRequest offerRequest) {
         return Offer.builder()
                 .demand(offerRequest.getDemand())
                 .text(offerRequest.getText())
-                .user(offerRequest.getUser())
+                .userId(offerRequest.getUser().getId())
                 .build();
+    }
+
+    public static Offer updateOffer(Offer offer, OfferRequest offerRequest) {
+        offer.setText(offerRequest.getText());
+        return offer;
     }
 }

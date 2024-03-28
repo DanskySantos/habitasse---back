@@ -10,9 +10,12 @@ import com.project.habitasse.security.user.entities.User;
 import com.project.habitasse.security.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +48,7 @@ public class OfferService {
 
         return offerRepository.save(Offer.updateOffer(offer, offerRequest));
     }
+
 
 //    public void deleteById(Integer propertyId, Integer demandId) {
 //        PropertyDemand propertyDemand = new PropertyDemand();

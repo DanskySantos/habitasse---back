@@ -33,11 +33,23 @@ public class Offer extends SuperclassEntity implements Serializable {
     @Column(name = "user_id")
     private Integer userId;
 
+    @Column(name = "user_email")
+    private String userEmail;
+
+    @Column(name = "username_user")
+    private String username;
+
+    @Column(name = "user_contact")
+    private String contact;
+
     public static Offer createOffer(OfferRequest offerRequest) {
         return Offer.builder()
                 .demand(offerRequest.getDemand())
                 .text(offerRequest.getText())
                 .userId(offerRequest.getUser().getId())
+                .userEmail(offerRequest.getUser().getEmail())
+                .username(offerRequest.getUser().getUsernameForDto())
+                .contact(offerRequest.getDemand().getContact())
                 .build();
     }
 

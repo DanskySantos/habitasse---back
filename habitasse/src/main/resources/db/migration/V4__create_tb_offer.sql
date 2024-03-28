@@ -7,6 +7,9 @@ create table tb_offer
     demand_id               bigint,
     text                    varchar(2000),
     user_id                 bigint,
+    user_email              varchar(255),
+    username_user           varchar(255),
+    user_contact            varchar(255),
     primary key (id)
 );
 

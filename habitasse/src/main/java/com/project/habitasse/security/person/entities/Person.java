@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -39,12 +39,13 @@ public class Person extends SuperclassEntity implements Serializable {
 
     public static Person createPerson(RegisterRequest registerRequest) {
         Date birthday = null;
-        if (registerRequest.getBirthday() != null && StringUtils.hasText(registerRequest.getBirthday())) {
+        if (registerRequest.getBirthday() != null && !StringUtils.isEmpty(registerRequest.getBirthday())) {
             birthday = Utils.dateToSave(registerRequest.getBirthday());
         }
 
         return Person.builder()
                 .name(registerRequest.getName())
+                .phone(StringUtils.isEmpty(registerRequest.getPhone()) ? null : registerRequest.getPhone())
                 .birthday(birthday)
                 .build();
     }

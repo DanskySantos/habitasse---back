@@ -101,7 +101,7 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
                 .username(registerRequest.getUsername())
                 .password(registerRequest.getPassword())
                 .email(registerRequest.getEmail())
-                .role(Objects.equals(registerRequest.getUserRoles(), "Sou corretor") ? Role.USER_CO : Role.USER_CD)
+                .role(Objects.equals(registerRequest.getUserRoles(), "USER_CO") ? Role.USER_CO : Role.USER_CD)
                 .build();
     }
 

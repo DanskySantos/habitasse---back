@@ -10,7 +10,7 @@ public enum BedroomsNumberEnum {
     TWO("2", 2),
     THREE("3", 3),
     FOUR("4", 4),
-    FIVE_OR_MORE("5 ou mais quartos", 5);
+    FIVE_OR_MORE("5 ou mais", 5);
 
     private final String desciption;
     private final Integer value;

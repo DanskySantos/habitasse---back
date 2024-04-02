@@ -49,19 +49,9 @@ public class OfferService {
         return offerRepository.save(Offer.updateOffer(offer, offerRequest));
     }
 
+    public Page<Offer> getByDemand(Integer demandId, Pageable pageable) {
+        Demand demand = demandRepository.findById(Long.valueOf(demandId)).orElseThrow();
 
-//    public void deleteById(Integer propertyId, Integer demandId) {
-//        PropertyDemand propertyDemand = new PropertyDemand();
-//        Demand demand = new Demand();
-//
-//        if(propertyId != null)
-//            propertyDemand = propertyDemandRepository.findById(Long.valueOf(propertyId)).get();
-//        if(demandId != null)
-//            demand = demandRepository.findById(Long.valueOf(demandId)).get();
-//
-//        Demand.delete(demand);
-//        PropertyDemand.delete(propertyDemand);
-//        propertyDemandRepository.save(propertyDemand);
-//        demandRepository.save(demand);
-//    }
+        return offerRepository.getOfferByDemand(demand, pageable);
+    }
 }

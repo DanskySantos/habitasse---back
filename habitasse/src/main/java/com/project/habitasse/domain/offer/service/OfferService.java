@@ -35,6 +35,7 @@ public class OfferService {
 
         offerRequest.setUser(user);
         offerRequest.setDemand(demand);
+        offerRequest.setContact(user.getPerson().getPhone());
 
         Offer newOffer = Offer.createOffer(offerRequest);
 

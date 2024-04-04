@@ -19,4 +19,5 @@ public class OfferRequest {
     private Demand demand;
     private User user;
     private String text;
+    private String contact;
 }

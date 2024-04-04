@@ -49,7 +49,7 @@ public class Offer extends SuperclassEntity implements Serializable {
                 .userId(offerRequest.getUser().getId())
                 .userEmail(offerRequest.getUser().getEmail())
                 .username(offerRequest.getUser().getUsernameForDto())
-                .contact(offerRequest.getDemand().getContact())
+                .contact(offerRequest.getContact())
                 .build();
     }
 

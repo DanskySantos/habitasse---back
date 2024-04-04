@@ -23,4 +23,7 @@ public class AuthenticationResponse {
 
   @JsonProperty("userId")
   private Integer userId;
+
+  @JsonProperty("userRole")
+  private String userRole;
 }

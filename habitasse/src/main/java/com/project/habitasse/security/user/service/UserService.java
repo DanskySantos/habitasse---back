@@ -64,6 +64,7 @@ public class UserService implements UserDetailsService {
                 .accessToken(jwtToken)
                 .userId(userSaved.getId())
                 .userName(userSaved.getUsernameForDto())
+                .userRole(String.valueOf(userSaved.getRole()))
                 .refreshToken(refreshToken)
                 .build();
     }
@@ -86,6 +87,7 @@ public class UserService implements UserDetailsService {
                 .userId(user.getId())
                 .refreshToken(refreshToken)
                 .userName(user.getUsernameForDto())
+                .userRole(String.valueOf(user.getRole()))
                 .build();
     }
 

@@ -100,8 +100,8 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
         propertyDemand.setContractType(ContractTypeEnum.getByDescription(propertyDemandRequest.getContractType()));
         propertyDemand.setPropertyType(PropertyTypeEnum.getByDescription(propertyDemandRequest.getPropertyType()));
         propertyDemand.setBedroomsNumber(BedroomsNumberEnum.getByDescription(propertyDemandRequest.getBedroomsNumber()));
-        propertyDemand.setFurnished(Boolean.parseBoolean(propertyDemandRequest.getFurnished()));
-        propertyDemand.setPetFriendly(Boolean.parseBoolean(propertyDemandRequest.getPetFriendly()));
+        propertyDemand.setFurnished(Objects.equals(propertyDemandRequest.getFurnished(), "Sim"));
+        propertyDemand.setPetFriendly(Objects.equals(propertyDemandRequest.getPetFriendly(), "Sim"));
         propertyDemand.setSuggestedValueForRent(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForRent())
                  ? null
                  : SuggestedValueForRentEnum.getByDescription(propertyDemandRequest.getSuggestedValueForRent()));

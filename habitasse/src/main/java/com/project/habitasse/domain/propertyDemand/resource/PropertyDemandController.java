@@ -1,9 +1,7 @@
 package com.project.habitasse.domain.propertyDemand.resource;
 
-import com.project.habitasse.domain.propertyDemand.entities.PropertyDemand;
 import com.project.habitasse.domain.propertyDemand.entities.request.PropertyDemandRequest;
 import com.project.habitasse.domain.propertyDemand.service.PropertyDemandService;
-import com.project.habitasse.security.user.entities.request.UserRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

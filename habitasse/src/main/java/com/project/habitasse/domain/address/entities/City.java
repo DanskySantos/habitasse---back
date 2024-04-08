@@ -1,7 +1,5 @@
 package com.project.habitasse.domain.address.entities;
 
-import com.project.habitasse.domain.common.SuperclassEntity;
-import com.project.habitasse.domain.propertyDemand.entities.request.PropertyDemandRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

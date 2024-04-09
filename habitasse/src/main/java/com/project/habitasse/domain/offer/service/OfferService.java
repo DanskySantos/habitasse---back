@@ -8,6 +8,7 @@ import com.project.habitasse.domain.offer.repository.OfferRepository;
 import com.project.habitasse.security.service.JwtService;
 import com.project.habitasse.security.user.entities.User;
 import com.project.habitasse.security.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,5 +54,15 @@ public class OfferService {
         Demand demand = demandRepository.findById(Long.valueOf(demandId)).orElseThrow();
 
         return offerRepository.getOfferByDemand(demand, pageable);
+    }
+
+    @Transactional
+    public Offer acceptOffer(Long id) throws Exception {
+        Offer offer = offerRepository.findById(id).orElseThrow();
+        if (offer.isAccepted())
+            throw new Exception("Oferta com id " + id + " já foi aceita");
+
+        offer.setAccepted(true);
+        return offerRepository.save(offer);
     }
 }

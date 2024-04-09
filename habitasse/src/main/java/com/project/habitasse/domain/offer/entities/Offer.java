@@ -42,6 +42,9 @@ public class Offer extends SuperclassEntity implements Serializable {
     @Column(name = "user_contact")
     private String contact;
 
+    @Column(name = "accepted")
+    private boolean accepted;
+
     public static Offer createOffer(OfferRequest offerRequest) {
         return Offer.builder()
                 .demand(offerRequest.getDemand())
@@ -50,6 +53,7 @@ public class Offer extends SuperclassEntity implements Serializable {
                 .userEmail(offerRequest.getUser().getEmail())
                 .username(offerRequest.getUser().getUsernameForDto())
                 .contact(offerRequest.getContact())
+                .accepted(false)
                 .build();
     }
 

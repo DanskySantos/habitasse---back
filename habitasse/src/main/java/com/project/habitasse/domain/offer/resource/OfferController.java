@@ -47,5 +47,13 @@ public class OfferController {
         Pageable paging = PageRequest.of(page, size);
         return ResponseEntity.ok(offerService.getByDemand(demandId, paging));
     }
+
+    @PostMapping("/accept/{id}")
+    public ResponseEntity<?> acceptOffer(@PathVariable Long id) throws Exception {
+         if(id == null)
+             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID inválido");
+
+         return ResponseEntity.ok(offerService.acceptOffer(id));
+    }
 }
 

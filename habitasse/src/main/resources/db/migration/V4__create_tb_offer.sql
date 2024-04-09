@@ -10,6 +10,7 @@ create table tb_offer
     user_email              varchar(255),
     username_user           varchar(255),
     user_contact            varchar(255),
+    accepted                boolean not null,
     primary key (id)
 );
 

@@ -20,4 +20,5 @@ public class OfferRequest {
     private User user;
     private String text;
     private String contact;
+    private boolean accepted;
 }

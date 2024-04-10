@@ -50,7 +50,7 @@ public class SecurityConfiguration {
 
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.addAllowedOrigin("https://habitasse.netlify.app");
+                    config.addAllowedOrigin("https://habitasseapp.com");
                     config.addAllowedHeader("*");
                     config.addAllowedMethod("*");
                     return config;

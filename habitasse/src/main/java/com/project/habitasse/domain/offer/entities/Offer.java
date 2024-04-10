@@ -57,6 +57,8 @@ public class Offer extends SuperclassEntity implements Serializable {
                 .build();
     }
 
+
+
     public static Offer updateOffer(Offer offer, OfferRequest offerRequest) {
         offer.setText(offerRequest.getText());
         return offer;

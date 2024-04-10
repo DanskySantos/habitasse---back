@@ -57,11 +57,8 @@ public class OfferService {
     }
 
     @Transactional
-    public Offer acceptOffer(Long id) throws Exception {
-        Offer offer = offerRepository.findById(id).orElseThrow();
-        if (offer.isAccepted())
-            throw new Exception("Oferta com id " + id + " já foi aceita");
-
+    public Offer acceptOffer(Integer id) throws Exception {
+        Offer offer = offerRepository.findById(Long.valueOf(id)).orElseThrow();
         offer.setAccepted(true);
         return offerRepository.save(offer);
     }

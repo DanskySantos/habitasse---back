@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.habitasse.domain.common.SuperclassEntity;
 import com.project.habitasse.domain.demand.entities.Demand;
 import com.project.habitasse.domain.offer.entities.request.OfferRequest;
-import com.project.habitasse.security.user.entities.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,7 +42,10 @@ public class Offer extends SuperclassEntity implements Serializable {
     private String contact;
 
     @Column(name = "accepted")
-    private boolean accepted;
+    private boolean accepted = false;
+
+    @Column(name = "deleted")
+    private boolean isDeleted = false;
 
     public static Offer createOffer(OfferRequest offerRequest) {
         return Offer.builder()
@@ -53,14 +55,20 @@ public class Offer extends SuperclassEntity implements Serializable {
                 .userEmail(offerRequest.getUser().getEmail())
                 .username(offerRequest.getUser().getUsernameForDto())
                 .contact(offerRequest.getContact())
-                .accepted(false)
                 .build();
     }
 
-
-
     public static Offer updateOffer(Offer offer, OfferRequest offerRequest) {
         offer.setText(offerRequest.getText());
+        return offer;
+    }
+
+    public static void acceptedOffer(Offer offer){
+     offer.setAccepted(true);
+    }
+
+    public static Offer delete(Offer offer){
+        offer.setDeleted(true);
         return offer;
     }
 }

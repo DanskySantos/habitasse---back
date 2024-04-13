@@ -5,6 +5,7 @@ import com.project.habitasse.domain.demand.repository.DemandRepository;
 import com.project.habitasse.domain.offer.entities.Offer;
 import com.project.habitasse.domain.offer.entities.request.OfferRequest;
 import com.project.habitasse.domain.offer.repository.OfferRepository;
+import com.project.habitasse.domain.propertyDemand.entities.PropertyDemand;
 import com.project.habitasse.security.service.JwtService;
 import com.project.habitasse.security.user.entities.User;
 import com.project.habitasse.security.user.repository.UserRepository;
@@ -36,7 +37,6 @@ public class OfferService {
         offerRequest.setUser(user);
         offerRequest.setDemand(demand);
         offerRequest.setContact(user.getPerson().getPhone());
-
         Offer newOffer = Offer.createOffer(offerRequest);
 
         return offerRepository.save(newOffer);
@@ -57,9 +57,18 @@ public class OfferService {
     }
 
     @Transactional
-    public Offer acceptOffer(Integer id) throws Exception {
+    public void acceptOffer(Integer id){
         Offer offer = offerRepository.findById(Long.valueOf(id)).orElseThrow();
-        offer.setAccepted(true);
-        return offerRepository.save(offer);
+        Offer.acceptedOffer(offer);
+
+        offerRepository.save(offer);
+    }
+
+    @Transactional
+    public void deleteOfferById(Integer id){
+        Offer offer = offerRepository.findById(Long.valueOf(id)).orElseThrow();
+
+        Offer.delete(offer);
+        offerRepository.save(offer);
     }
 }

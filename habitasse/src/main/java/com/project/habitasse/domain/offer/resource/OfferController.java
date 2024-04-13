@@ -1,10 +1,13 @@
 package com.project.habitasse.domain.offer.resource;
 
+import com.project.habitasse.domain.offer.entities.Offer;
 import com.project.habitasse.domain.offer.entities.request.OfferRequest;
 import com.project.habitasse.domain.offer.service.OfferService;
+import com.project.habitasse.domain.propertyDemand.entities.PropertyDemand;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.coyote.Response;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -53,7 +56,17 @@ public class OfferController {
          if(id == null)
              return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID inválido");
 
-         return ResponseEntity.ok(offerService.acceptOffer(id));
+         offerService.acceptOffer(id);
+         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{offerId}")
+    public ResponseEntity<?> deleteOffer(@PathVariable Integer id) throws Exception {
+        if(id == null)
+             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID inválido");
+
+        offerService.deleteOfferById(id);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
 

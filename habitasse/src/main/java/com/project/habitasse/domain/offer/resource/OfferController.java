@@ -61,11 +61,11 @@ public class OfferController {
     }
 
     @DeleteMapping("/delete/{offerId}")
-    public ResponseEntity<?> deleteOffer(@PathVariable Integer id) throws Exception {
-        if(id == null)
-             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID inválido");
+    public ResponseEntity<?> deleteOffer(@PathVariable Integer offerId) throws Exception {
+        if (offerId == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID inválido ou token ausente");
 
-        offerService.deleteOfferById(id);
+        offerService.deleteOfferById(offerId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

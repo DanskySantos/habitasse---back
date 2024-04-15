@@ -65,10 +65,10 @@ public class OfferService {
     }
 
     @Transactional
-    public void deleteOfferById(Integer id){
-        Offer offer = offerRepository.findById(Long.valueOf(id)).orElseThrow();
-
+    public void deleteOfferById(Integer offerId){
+        Offer offer = offerRepository.findById(Long.valueOf(offerId)).orElseThrow();
         Offer.delete(offer);
+
         offerRepository.save(offer);
     }
 }

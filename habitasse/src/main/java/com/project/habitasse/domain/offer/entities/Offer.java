@@ -45,7 +45,7 @@ public class Offer extends SuperclassEntity implements Serializable {
     private boolean accepted = false;
 
     @Column(name = "deleted")
-    private boolean isDeleted = false;
+    private boolean deleted = false;
 
     public static Offer createOffer(OfferRequest offerRequest) {
         return Offer.builder()
@@ -64,11 +64,10 @@ public class Offer extends SuperclassEntity implements Serializable {
     }
 
     public static void acceptedOffer(Offer offer){
-     offer.setAccepted(true);
+        offer.setAccepted(true);
     }
 
-    public static Offer delete(Offer offer){
+    public static void delete(Offer offer){
         offer.setDeleted(true);
-        return offer;
     }
 }

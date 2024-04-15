@@ -69,7 +69,7 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @Column(name = "is_deleted")
+    @Column(name = "deleted")
     private boolean isDeleted = false;
 
     public static PropertyDemand createPropertyDemand(PropertyDemandRequest propertyDemandRequest) {

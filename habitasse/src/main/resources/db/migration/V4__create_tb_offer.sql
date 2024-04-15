@@ -11,7 +11,7 @@ create table tb_offer
     username_user           varchar(255),
     user_contact            varchar(255),
     accepted                boolean default false,
-    is_deleted                 boolean default false,
+    deleted                 boolean default false,
     primary key (id)
 );
 

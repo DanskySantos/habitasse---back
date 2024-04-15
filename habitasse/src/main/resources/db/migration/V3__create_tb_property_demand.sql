@@ -15,7 +15,7 @@ create table tb_property_demand
     demand_id                       bigint,
     address_id                      bigint,
     user_id                         bigint,
-    is_deleted                      boolean default false,
+    deleted                         boolean default false,
     primary key (id)
 );
 

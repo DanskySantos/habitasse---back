@@ -53,7 +53,7 @@ public class OfferService {
     public Page<Offer> getByDemand(Integer demandId, Pageable pageable) {
         Demand demand = demandRepository.findById(Long.valueOf(demandId)).orElseThrow();
 
-        return offerRepository.getOfferByDemand(demand, pageable);
+        return offerRepository.getOfferByDemandAndDeletedFalse(demand, pageable);
     }
 
     @Transactional

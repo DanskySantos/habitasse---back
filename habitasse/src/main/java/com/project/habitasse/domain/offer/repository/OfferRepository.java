@@ -13,5 +13,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Long> {
 
-    Page<Offer> getOfferByDemand(Demand demand, Pageable pageable);
+    Page<Offer> getOfferByDemandAndDeletedFalse(Demand demand, Pageable pageable);
 }

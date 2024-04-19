@@ -2,6 +2,8 @@ package com.project.habitasse.security.user.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.habitasse.domain.propertyDemand.repository.PropertyDemandRepository;
+import com.project.habitasse.outside.enums.PlansEnum;
+import com.project.habitasse.security.payment.entities.Payment;
 import com.project.habitasse.security.person.entities.Person;
 import com.project.habitasse.security.person.repository.PersonRepository;
 import com.project.habitasse.security.service.JwtService;
@@ -28,6 +30,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +52,7 @@ public class UserService implements UserDetailsService {
         createUsername(registerRequest);
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequest.getPassword());
         registerRequest.setPassword(encryptedPassword);
+        Long remainingDays = null;
 
         User newUser = User.createUser(registerRequest);
         Person newPerson = Person.createPerson(registerRequest);
@@ -60,12 +66,19 @@ public class UserService implements UserDetailsService {
         var jwtToken = jwtService.generateTokenWithRole(userSaved);
         var refreshToken = jwtService.generateRefreshToken(userSaved);
         saveUserToken(userSaved, jwtToken);
+
+        if (userSaved.getPayments() != null && !userSaved.getPayments().isEmpty()) {
+            Payment lastPayment = userSaved.getPayments().get(userSaved.getPayments().size() - 1);
+            remainingDays = getRemainingDays(lastPayment);
+        }
+
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .userId(userSaved.getId())
                 .userName(userSaved.getUsernameForDto())
                 .userRole(String.valueOf(userSaved.getRole()))
                 .refreshToken(refreshToken)
+                .remainingDays(remainingDays)
                 .build();
     }
 
@@ -80,14 +93,22 @@ public class UserService implements UserDetailsService {
         var user = userRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateTokenWithRole(user);
         var refreshToken = jwtService.generateRefreshToken(user);
+        Long remainingDays = null;
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
+
+        if (user.getPayments() != null && !user.getPayments().isEmpty()) {
+            Payment lastPayment = user.getPayments().get(user.getPayments().size() - 1);
+            remainingDays = getRemainingDays(lastPayment);
+        }
+
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .userId(user.getId())
                 .refreshToken(refreshToken)
                 .userName(user.getUsernameForDto())
                 .userRole(String.valueOf(user.getRole()))
+                .remainingDays(remainingDays)
                 .build();
     }
 
@@ -152,10 +173,24 @@ public class UserService implements UserDetailsService {
     }
 
     public UserResponse findByTokenEmail(String token) {
-        var user = userRepository.findByEmail(jwtService.getEmail(token));
-        var demandsQuantity = propertyDemandRepository.countByUser(user.get());
+        var user = userRepository.findByEmail(jwtService.getEmail(token)).get();
+        var demandsQuantity = propertyDemandRepository.countByUser(user);
+        Long remainingDays = null;
 
-        return UserResponse.mapEntityToResponse(user.get(), demandsQuantity);
+        if (user.getPayments() != null && !user.getPayments().isEmpty()) {
+            Payment lastPayment = user.getPayments().get(user.getPayments().size() - 1);
+            remainingDays = getRemainingDays(lastPayment);
+        }
+
+        return UserResponse.mapEntityToResponse(user, demandsQuantity, remainingDays);
+    }
+
+    public Long getRemainingDays(Payment lastPayment) {
+
+        LocalDate authorizationDate = lastPayment.getAuthorizationDate().toLocalDate();
+        LocalDate expirationDate = lastPayment.getExpirationDate().toLocalDate();
+
+        return ChronoUnit.DAYS.between(authorizationDate, expirationDate);
     }
 
     public Optional<User> findByUsername(String username) throws UsernameNotFoundException {
@@ -193,6 +228,20 @@ public class UserService implements UserDetailsService {
         String capitalizedLastName = lastName.length() > 0 ? lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase() : "";
         String username = capitalizedFirstName + " " + capitalizedLastName;
         registerRequest.setUsername(username);
+    }
 
+    public void activateCOUser(String email,
+                               PlansEnum plan,
+                               String receiptUrl,
+                               String eventId,
+                               String objectId,
+                               String invoiceId,
+                               String balanceTransactionId,
+                               String userName,
+                               LocalDateTime created) {
+        User user = userRepository.findByEmail(email).get();
+        Payment payment = Payment.createPayment(user.getId(), eventId, objectId, invoiceId, balanceTransactionId, userName, created, plan, receiptUrl);
+        user.getPayments().add(payment);
+        userRepository.save(user);
     }
 }

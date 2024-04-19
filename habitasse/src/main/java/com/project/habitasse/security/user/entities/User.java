@@ -2,6 +2,7 @@ package com.project.habitasse.security.user.entities;
 
 import com.project.habitasse.domain.common.SuperclassEntity;
 import com.project.habitasse.domain.offer.entities.Offer;
+import com.project.habitasse.security.payment.entities.Payment;
 import com.project.habitasse.security.person.entities.Person;
 import com.project.habitasse.security.roles.entity.Role;
 import com.project.habitasse.security.user.entities.request.RegisterRequest;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -50,11 +52,8 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    @Column(name = "authorization_date", nullable = false)
-//    private LocalDateTime authorizationDate;
-//
-//    @Column(name = "expiration_date", nullable = false)
-//    private LocalDateTime expirationDate;
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Payment> payments;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

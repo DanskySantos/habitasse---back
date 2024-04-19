@@ -33,8 +33,9 @@ public class UserResponse {
     private Boolean accountNonLocked;
     private Boolean accountNonExpired;
     private Integer demandsQuantity;
+    private Long remainingDays;
 
-    public static UserResponse mapEntityToResponse(User user, Integer demandsQuantity) {
+    public static UserResponse mapEntityToResponse(User user, Integer demandsQuantity, Long remainingDays) {
 
         return UserResponse.builder()
                 .username(user.getUsernameForDto())
@@ -46,6 +47,7 @@ public class UserResponse {
                 .phone(user.getPerson().getPhone())
                 .role(user.getRole().name())
                 .demandsQuantity(demandsQuantity > 0 ? demandsQuantity : 0)
+                .remainingDays(remainingDays != null ? remainingDays : null)
                 .build();
     }
 }

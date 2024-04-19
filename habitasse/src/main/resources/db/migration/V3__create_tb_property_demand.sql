@@ -5,7 +5,7 @@ create table tb_property_demand
     update_date                     timestamp,
     uuid                            varchar(255),
     contract_type                   varchar(255),
-    property_type                    varchar(255),
+    property_type                   varchar(255),
     bedrooms_number                 varchar(255),
     furnished                       boolean default false,
     pet_friendly                    boolean default false,

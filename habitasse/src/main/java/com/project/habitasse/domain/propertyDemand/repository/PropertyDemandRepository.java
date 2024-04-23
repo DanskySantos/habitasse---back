@@ -19,6 +19,7 @@ public interface PropertyDemandRepository extends JpaRepository<PropertyDemand, 
             "JOIN d.propertyDemand pd " +
             "JOIN pd.address addr " +
             "WHERE d.propertyDemand.isDeleted = false " +
+            "AND (:id is null or d.id = :id) " +
             "AND (:contractType is null or pd.contractType = :contractType) " +
             "AND (:propertyType is null or pd.propertyType = :propertyType) " +
             "AND (:bedroomsNumber is null or pd.bedroomsNumber = :bedroomsNumber) " +
@@ -32,6 +33,7 @@ public interface PropertyDemandRepository extends JpaRepository<PropertyDemand, 
             "ORDER BY d.id DESC",
             nativeQuery = false)
     Page<Demand> getFilteredDemands(
+            @Param("id") Integer id,
             @Param("contractType") ContractTypeEnum contractType,
             @Param("propertyType") PropertyTypeEnum propertyType,
             @Param("bedroomsNumber") BedroomsNumberEnum bedroomsNumber,

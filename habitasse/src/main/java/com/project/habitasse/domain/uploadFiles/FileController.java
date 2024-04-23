@@ -20,7 +20,6 @@ public class FileController {
         this.s3Service = s3Service;
     }
 
-
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {

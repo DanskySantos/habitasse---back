@@ -1,5 +1,6 @@
 package com.project.habitasse.domain.demand.service;
 
+import com.nimbusds.jose.util.IntegerUtils;
 import com.project.habitasse.domain.demand.entities.Demand;
 import com.project.habitasse.domain.demand.repository.DemandRepository;
 import com.project.habitasse.domain.enums.*;
@@ -34,6 +35,7 @@ public class DemandService {
     public Page<Demand> getFilteredDemands(Pageable pageable, PropertyDemandRequest propertyDemandRequest) {
 
         return propertyDemandRepository.getFilteredDemands(
+                propertyDemandRequest.getId(),
                 StringUtils.isEmpty(propertyDemandRequest.getContractType()) ? null : ContractTypeEnum.getByDescription(propertyDemandRequest.getContractType()),
                 StringUtils.isEmpty(propertyDemandRequest.getPropertyType()) ? null : PropertyTypeEnum.getByDescription(propertyDemandRequest.getPropertyType()),
                 StringUtils.isEmpty(propertyDemandRequest.getBedroomsNumber()) ? null : BedroomsNumberEnum.getByDescription(propertyDemandRequest.getBedroomsNumber()),

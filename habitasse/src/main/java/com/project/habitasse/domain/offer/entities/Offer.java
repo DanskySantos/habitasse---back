@@ -3,6 +3,7 @@ package com.project.habitasse.domain.offer.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.habitasse.domain.common.SuperclassEntity;
 import com.project.habitasse.domain.demand.entities.Demand;
+import com.project.habitasse.domain.offer.entities.request.FileRequest;
 import com.project.habitasse.domain.offer.entities.request.OfferRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -41,6 +44,9 @@ public class Offer extends SuperclassEntity implements Serializable {
     @Column(name = "user_contact")
     private String contact;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "offer")
+    private List<File> files;
+
     @Column(name = "accepted")
     private boolean accepted = false;
 
@@ -48,14 +54,22 @@ public class Offer extends SuperclassEntity implements Serializable {
     private boolean deleted = false;
 
     public static Offer createOffer(OfferRequest offerRequest) {
-        return Offer.builder()
-                .demand(offerRequest.getDemand())
-                .text(offerRequest.getText())
-                .userId(offerRequest.getUser().getId())
-                .userEmail(offerRequest.getUser().getEmail())
-                .username(offerRequest.getUser().getUsernameForDto())
-                .contact(offerRequest.getContact())
-                .build();
+        Offer offer = new Offer();
+        offer.setFiles(new ArrayList<>());
+        for(FileRequest fileRequest : offerRequest.getFiles()) {
+            File file = File.createFile(fileRequest);
+            file.setOffer(offer);
+            offer.getFiles().add(file);
+        }
+
+        offer.setDemand(offerRequest.getDemand());
+        offer.setText(offerRequest.getText());
+        offer.setUserId(offerRequest.getUser().getId());
+        offer.setUserEmail(offerRequest.getUser().getEmail());
+        offer.setUsername(offerRequest.getUser().getUsernameForDto());
+        offer.setContact(offerRequest.getContact());
+
+        return offer;
     }
 
     public static Offer updateOffer(Offer offer, OfferRequest offerRequest) {

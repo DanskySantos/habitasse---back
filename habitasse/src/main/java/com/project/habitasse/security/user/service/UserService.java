@@ -90,7 +90,7 @@ public class UserService implements UserDetailsService {
                 )
         );
 
-        var user = userRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
+        var user = userRepository.findByEmailAndExcludedFalse(authenticationRequest.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateTokenWithRole(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         Long remainingDays = null;
@@ -144,7 +144,7 @@ public class UserService implements UserDetailsService {
         refreshToken = authHeader.substring(7);
         userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail != null) {
-            var user = this.userRepository.findByEmail(userEmail)
+            var user = this.userRepository.findByEmailAndExcludedFalse(userEmail)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
                 var accessToken = jwtService.generateTokenWithRole(user);
@@ -169,11 +169,11 @@ public class UserService implements UserDetailsService {
     }
 
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailAndExcludedFalse(email);
     }
 
     public UserResponse findByTokenEmail(String token) {
-        var user = userRepository.findByEmail(jwtService.getEmail(token)).get();
+        var user = userRepository.findByEmailAndExcludedFalse(jwtService.getEmail(token)).get();
         var demandsQuantity = propertyDemandRepository.countByUser(user);
         Long remainingDays = null;
 
@@ -194,7 +194,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Optional<User> findByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsernameAndExcludedFalse(username);
     }
 
     public User updateUser(Long id, UserRequest updateUser) {
@@ -217,7 +217,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email).get();
+        return userRepository.findByEmailAndExcludedFalse(email).get();
     }
 
     public void createUsername(RegisterRequest registerRequest) {
@@ -239,9 +239,14 @@ public class UserService implements UserDetailsService {
                                String balanceTransactionId,
                                String userName,
                                LocalDateTime created) {
-        User user = userRepository.findByEmail(email).get();
+        User user = userRepository.findByEmailAndExcludedFalse(email).get();
         Payment payment = Payment.createPayment(user.getId(), eventId, objectId, invoiceId, balanceTransactionId, userName, created, plan, receiptUrl);
         user.getPayments().add(payment);
         userRepository.save(user);
+    }
+
+    public User deleteUser(Long id) {
+        User user = userRepository.findById(id).get();
+        return userRepository.save(User.deleteUser(user));
     }
 }

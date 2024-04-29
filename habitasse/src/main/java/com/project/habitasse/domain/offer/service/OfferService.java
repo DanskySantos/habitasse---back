@@ -28,7 +28,7 @@ public class OfferService {
     private final JwtService jwtService;
 
     public Offer saveOffer(OfferRequest offerRequest, String token) throws Exception {
-        User user = userRepository.findByEmail(jwtService.getEmail(token)).orElseThrow();
+        User user = userRepository.findByEmailAndExcludedFalse(jwtService.getEmail(token)).orElseThrow();
         Demand demand = demandRepository.findById(offerRequest.getDemandId()).orElseThrow();
 
         if (demand.getOffers().stream().anyMatch(offer -> Objects.equals(offer.getUserId(), user.getId())))

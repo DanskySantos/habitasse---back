@@ -55,6 +55,9 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Payment> payments;
 
+    @Column(name = "excluded")
+    private boolean excluded = false;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();
@@ -100,6 +103,7 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
                 .username(registerRequest.getUsername())
                 .password(registerRequest.getPassword())
                 .email(registerRequest.getEmail())
+                .excluded(false)
                 .role(Objects.equals(registerRequest.getUserRoles(), "USER_CO") ? Role.USER_CO : Role.USER_CD)
                 .build();
     }
@@ -120,6 +124,11 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
 
     public static User updatePassword(User user, String newPassword) {
         user.setPassword(newPassword);
+        return user;
+    }
+
+    public static User deleteUser(User user) {
+        user.setExcluded(true);
         return user;
     }
 }

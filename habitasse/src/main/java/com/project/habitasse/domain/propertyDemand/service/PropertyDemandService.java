@@ -33,7 +33,7 @@ public class PropertyDemandService {
         PropertyDemand newPropertyDemand = PropertyDemand.createPropertyDemand(propertyDemandRequest);
 
         newPropertyDemand.setAddress(address);
-        newPropertyDemand.setUser(userRepository.findByEmail(jwtService.getEmail(token)).orElseThrow());
+        newPropertyDemand.setUser(userRepository.findByEmailAndExcludedFalse(jwtService.getEmail(token)).orElseThrow());
 
         addressRepository.save(address);
         PropertyDemand propertyDemand = propertyDemandRepository.save(newPropertyDemand);

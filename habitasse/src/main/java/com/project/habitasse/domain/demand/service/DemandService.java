@@ -27,7 +27,7 @@ public class DemandService {
     private final JwtService jwtService;
 
     public Page<Demand> getByUserEmail(String token, Pageable pageable) {
-        User user = userRepository.findByEmail(jwtService.getEmail(token)).orElseThrow();
+        User user = userRepository.findByEmailAndExcludedFalse(jwtService.getEmail(token)).orElseThrow();
 
         return demandRepository.getByUserEmail(user.getId(), pageable);
     }

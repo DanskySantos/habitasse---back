@@ -47,5 +47,5 @@ ALTER TABLE tb_user ADD CONSTRAINT uk_86cal5mg9j0t8j9yn28n9ijjj UNIQUE (uuid);
 END IF;
 END $$;
 
-ALTER TABLE IF EXISTS tb_user
-    ADD CONSTRAINT IF NOT EXISTS FK349pmtlc4ukgn1so04k2ls4jj foreign key (person_id) references tb_person;
+ALTER TABLE tb_user
+    ADD CONSTRAINT IF NOT EXISTS fk_person_id FOREIGN KEY (person_id) REFERENCES tb_person(id);

@@ -25,9 +25,24 @@ CREATE TABLE IF NOT EXISTS tb_person
     primary key (id)
 );
 
-ALTER TABLE IF EXISTS tb_person
-    ADD CONSTRAINT IF NOT EXISTS UK_86cal5mg9j0t8j9yn28n9iulc unique (uuid);
-ALTER TABLE IF EXISTS tb_user
-    ADD CONSTRAINT IF NOT EXISTS UK_86cal5mg9j0t8j9yn28n9ijjj unique (uuid);
-ALTER TABLE IF EXISTS tb_user
-    ADD CONSTRAINT IF NOT EXISTS FK349pmtlc4ukgn1so04k2ls4jj foreign key (person_id) references tb_person;
+DO $$
+BEGIN
+BEGIN
+ALTER TABLE tb_person ADD CONSTRAINT UK_86cal5mg9j0t8j9yn28n9iulc UNIQUE (uuid);
+EXCEPTION
+        WHEN duplicate_object THEN
+        RAISE NOTICE 'Constraint UK_86cal5mg9j0t8j9yn28n9iulc already exists.';
+END;
+END $$;
+
+DO $$
+BEGIN
+BEGIN
+ALTER TABLE tb_user ADD CONSTRAINT UK_86cal5mg9j0t8j9yn28n9ijjj UNIQUE (uuid);
+EXCEPTION
+        WHEN duplicate_object THEN
+        RAISE NOTICE 'Constraint UK_86cal5mg9j0t8j9yn28n9ijjj already exists.';
+END;
+END $$;
+
+ALTER TABLE IF EXISTS tb_user ADD CONSTRAINT IF NOT EXISTS FK349pmtlc4ukgn1so04k2ls4jj FOREIGN KEY (person_id) REFERENCES tb_person(id);

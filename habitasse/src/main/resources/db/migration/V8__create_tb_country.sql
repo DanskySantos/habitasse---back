@@ -1,4 +1,4 @@
-CREATE TABLE tb_country (
+CREATE TABLE IF NOT EXISTS tb_country (
   id            bigserial NOT NULL,
   nome          varchar(60),
   nome_pt       varchar(60),

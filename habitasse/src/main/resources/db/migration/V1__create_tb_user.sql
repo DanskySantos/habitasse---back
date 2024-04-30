@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS tb_user
     person_id           bigint,
     role                varchar(255),
     primary key (id)
-);
+    );
 
 CREATE TABLE IF NOT EXISTS tb_person
 (
@@ -23,26 +23,29 @@ CREATE TABLE IF NOT EXISTS tb_person
     phone               varchar(255),
     user_id             bigint,
     primary key (id)
-);
+    );
 
 DO $$
 BEGIN
-BEGIN
-ALTER TABLE tb_person ADD CONSTRAINT UK_86cal5mg9j0t8j9yn28n9iulc UNIQUE (uuid);
-EXCEPTION
-        WHEN duplicate_object THEN
-        RAISE NOTICE 'Constraint UK_86cal5mg9j0t8j9yn28n9iulc already exists.';
-END;
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'uk_86cal5mg9j0t8j9yn28n9iulc'
+    ) THEN
+ALTER TABLE tb_person ADD CONSTRAINT uk_86cal5mg9j0t8j9yn28n9iulc UNIQUE (uuid);
+END IF;
 END $$;
 
 DO $$
 BEGIN
-BEGIN
-ALTER TABLE tb_user ADD CONSTRAINT UK_86cal5mg9j0t8j9yn28n9ijjj UNIQUE (uuid);
-EXCEPTION
-        WHEN duplicate_object THEN
-        RAISE NOTICE 'Constraint UK_86cal5mg9j0t8j9yn28n9ijjj already exists.';
-END;
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'uk_86cal5mg9j0t8j9yn28n9ijjj'
+    ) THEN
+ALTER TABLE tb_user ADD CONSTRAINT uk_86cal5mg9j0t8j9yn28n9ijjj UNIQUE (uuid);
+END IF;
 END $$;
 
-ALTER TABLE IF EXISTS tb_user ADD CONSTRAINT IF NOT EXISTS FK349pmtlc4ukgn1so04k2ls4jj FOREIGN KEY (person_id) REFERENCES tb_person(id);
+ALTER TABLE IF EXISTS tb_user
+    ADD CONSTRAINT IF NOT EXISTS FK349pmtlc4ukgn1so04k2ls4jj foreign key (person_id) references tb_person;

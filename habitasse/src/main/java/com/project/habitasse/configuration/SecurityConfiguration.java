@@ -50,7 +50,7 @@ public class SecurityConfiguration {
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
-                    config.addAllowedOrigin("http://localhost:4200");
+                    config.addAllowedOrigin("https://habitasseapp.com");
                     config.addAllowedHeader("*");
                     config.addAllowedMethod("*");
                     return config;

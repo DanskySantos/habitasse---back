@@ -22,8 +22,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -82,35 +86,47 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getEmail(),
-                        authenticationRequest.getPassword()
-                )
-        );
+    public ResponseEntity<?> authenticate(AuthenticationRequest request) {
+        try {
+            var authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
 
-        var user = userRepository.findByEmailAndExcludedFalse(authenticationRequest.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateTokenWithRole(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        Long remainingDays = null;
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
+            if (authentication == null || !authentication.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha Incorreta");
+            }
 
-        if (user.getPayments() != null && !user.getPayments().isEmpty()) {
-            Payment lastPayment = user.getPayments().get(user.getPayments().size() - 1);
-            remainingDays = getRemainingDays(lastPayment);
+            var user = userRepository.findByEmailAndExcludedFalse(request.getEmail()).orElseThrow();
+            var jwtToken = jwtService.generateTokenWithRole(user);
+            var refreshToken = jwtService.generateRefreshToken(user);
+
+            Long remainingDays = null;
+            revokeAllUserTokens(user);
+            saveUserToken(user, jwtToken);
+
+            if (user.getPayments() != null && !user.getPayments().isEmpty()) {
+                Payment lastPayment = user.getPayments().get(user.getPayments().size() - 1);
+                remainingDays = getRemainingDays(lastPayment);
+            }
+
+            return ResponseEntity.ok().body(
+                    AuthenticationResponse.builder()
+                            .accessToken(jwtToken)
+                            .userId(user.getId())
+                            .refreshToken(refreshToken)
+                            .userName(user.getUsernameForDto())
+                            .userRole(String.valueOf(user.getRole()))
+                            .remainingDays(remainingDays)
+                            .build()
+            );
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Senha Incorreta");
         }
-
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .userId(user.getId())
-                .refreshToken(refreshToken)
-                .userName(user.getUsernameForDto())
-                .userRole(String.valueOf(user.getRole()))
-                .remainingDays(remainingDays)
-                .build();
     }
+
 
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()

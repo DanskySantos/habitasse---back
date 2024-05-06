@@ -71,6 +71,7 @@ public class Offer extends SuperclassEntity implements Serializable {
         offer.setUsername(offerRequest.getUser().getUsernameForDto());
         offer.setContact(offerRequest.getContact());
         offer.setDeleted(false);
+        offer.setAccepted(false);
 
         return offer;
     }

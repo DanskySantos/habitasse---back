@@ -31,9 +31,10 @@ public class DemandController {
     @PostMapping("/filter/{page}/{size}")
     public ResponseEntity<?> getFilteredDemands(@PathVariable Integer page,
                                                 @PathVariable Integer size,
-                                                @RequestBody PropertyDemandRequest propertyDemandRequest) {
+                                                @RequestBody PropertyDemandRequest propertyDemandRequest,
+                                                HttpServletRequest request) {
         Pageable paging = PageRequest.of(page, size);
-        return ResponseEntity.ok(demandService.getFilteredDemands(paging, propertyDemandRequest));
+        return ResponseEntity.ok(demandService.getFilteredDemands(paging, propertyDemandRequest, request.getHeader("Authorization")));
     }
 
 }

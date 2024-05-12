@@ -203,10 +203,10 @@ public class UserService implements UserDetailsService {
 
     public Long getRemainingDays(Payment lastPayment) {
 
-        LocalDate authorizationDate = lastPayment.getAuthorizationDate().toLocalDate();
+        LocalDate todayDate = LocalDate.now();
         LocalDate expirationDate = lastPayment.getExpirationDate().toLocalDate();
 
-        return ChronoUnit.DAYS.between(authorizationDate, expirationDate);
+        return ChronoUnit.DAYS.between(todayDate, expirationDate);
     }
 
     public Optional<User> findByUsername(String username) throws UsernameNotFoundException {

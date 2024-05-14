@@ -1,4 +1,4 @@
-CREATE TABLE tb_country (
+create table tb_country (
   id            bigserial NOT NULL,
   nome          varchar(60),
   nome_pt       varchar(60),
@@ -7,7 +7,7 @@ CREATE TABLE tb_country (
   primary key (id)
 );
 
-INSERT INTO tb_country (id, nome, nome_pt, sigla, bacen) VALUES
+insert into tb_country (id, nome, nome_pt, sigla, bacen) values
 (1, 'Brazil', 'Brasil', 'BR', 1058),
 (2, 'Afghanistan', 'Afeganistão', 'AF', 132),
 (3, 'Albania', 'Albânia, Republica da', 'AL', 175),

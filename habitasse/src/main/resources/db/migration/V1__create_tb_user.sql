@@ -25,7 +25,6 @@ create table tb_person
     primary key (id)
 );
 
-
 alter table tb_person
     add constraint UK_86cal5mg9j0t8j9yn28n9iulc unique (uuid);
 alter table tb_user

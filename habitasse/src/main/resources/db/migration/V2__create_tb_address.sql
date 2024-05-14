@@ -10,5 +10,5 @@ create table tb_address
     primary key (id)
 );
 
-alter table tb_user
+alter table tb_address
     add constraint UK_86cal5mg9j0t8j9yn28n9iulq unique (uuid);

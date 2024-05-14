@@ -32,7 +32,11 @@ public class DemandService {
         return demandRepository.getByUserEmail(user.getId(), pageable);
     }
 
-    public Page<Demand> getFilteredDemands(Pageable pageable, PropertyDemandRequest propertyDemandRequest) {
+    public Page<Demand> getFilteredDemands(Pageable pageable, PropertyDemandRequest propertyDemandRequest, String token) {
+        User user = null;
+        if (propertyDemandRequest.getUserId()){
+            user = userRepository.findByEmailAndExcludedFalse(jwtService.getEmail(token)).orElseThrow();
+        }
 
         return propertyDemandRepository.getFilteredDemands(
                 propertyDemandRequest.getId(),
@@ -46,6 +50,7 @@ public class DemandService {
                 StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForSeasonal()) ? null : SuggestedValueForSeasonalEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSeasonal()),
                 StringUtils.isEmpty(propertyDemandRequest.getState()) ? null : propertyDemandRequest.getState(),
                 StringUtils.isEmpty(propertyDemandRequest.getCity()) ? null : propertyDemandRequest.getCity(),
+                user == null ? null : user.getId(),
                 pageable
         );
     }

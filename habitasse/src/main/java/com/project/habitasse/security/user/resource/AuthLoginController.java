@@ -24,14 +24,18 @@ public class AuthLoginController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
+        var authenticationResponse = userService.authenticate(request);
         if (userService.findByEmail(request.getEmail()).isEmpty())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não existe um usuário com esse e-mail");
 
-        return ResponseEntity.ok(userService.authenticate(request));
+        if (authenticationResponse.getStatusCode() == HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senha Incorreta");
+
+        return ResponseEntity.ok(authenticationResponse);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) throws Exception {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         if (userService.findByEmail(registerRequest.getEmail()).isPresent())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Já existe um usuário cadastrado com esse e-mail");
 

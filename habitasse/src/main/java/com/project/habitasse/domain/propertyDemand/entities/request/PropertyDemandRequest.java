@@ -27,4 +27,5 @@ public class PropertyDemandRequest {
     private String annotation;
     private String contact;
     private PropertyDemand propertyDemand;
+    private Boolean userId;
 }

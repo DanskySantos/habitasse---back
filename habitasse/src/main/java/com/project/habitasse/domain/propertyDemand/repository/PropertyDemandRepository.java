@@ -30,6 +30,7 @@ public interface PropertyDemandRepository extends JpaRepository<PropertyDemand, 
             "AND (:suggestedValueForSeasonal is null or pd.suggestedValueForSeasonal = :suggestedValueForSeasonal) " +
             "AND (:state is null or addr.state = :state) " +
             "AND (:city is null or addr.city = :city) " +
+            "AND (:userId is null or EXISTS (SELECT 1 FROM Offer o WHERE o.demand = d AND o.userId = :userId)) " +
             "ORDER BY d.id DESC",
             nativeQuery = false)
     Page<Demand> getFilteredDemands(
@@ -44,6 +45,7 @@ public interface PropertyDemandRepository extends JpaRepository<PropertyDemand, 
             @Param("suggestedValueForSeasonal") SuggestedValueForSeasonalEnum suggestedValueForSeasonal,
             @Param("state") String state,
             @Param("city") String city,
+            @Param("userId") Integer userId,
             Pageable pageable
     );
 

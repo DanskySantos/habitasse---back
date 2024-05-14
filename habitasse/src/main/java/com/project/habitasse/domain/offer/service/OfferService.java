@@ -2,7 +2,9 @@ package com.project.habitasse.domain.offer.service;
 
 import com.project.habitasse.domain.demand.entities.Demand;
 import com.project.habitasse.domain.demand.repository.DemandRepository;
+import com.project.habitasse.domain.offer.entities.File;
 import com.project.habitasse.domain.offer.entities.Offer;
+import com.project.habitasse.domain.offer.entities.request.FileRequest;
 import com.project.habitasse.domain.offer.entities.request.OfferRequest;
 import com.project.habitasse.domain.offer.repository.OfferRepository;
 import com.project.habitasse.domain.propertyDemand.entities.PropertyDemand;
@@ -16,7 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +49,7 @@ public class OfferService {
 
     public Offer updateOffer(Long id, OfferRequest offerRequest) throws Exception {
         Offer offer = offerRepository.findById(id).orElseThrow();
+
         if (StringUtils.isEmpty(offerRequest.getText()))
             throw new Exception("O texto não pode ser nulo");
 

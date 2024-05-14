@@ -47,7 +47,6 @@ public class File extends SuperclassEntity implements Serializable {
                 .location(fileRequest.getLocation())
                 .status(fileRequest.getStatus())
                 .body(fileRequest.getBody())
-
                 .build();
     }
 }

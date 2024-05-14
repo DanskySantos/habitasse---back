@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public enum PlansEnum {
 
-    PLANO_SEMANAL(3999.0),
-    PLANO_QUINZENAL(6999.0),
-    PLANO_MENSAL(11999.0),
-    PLANO_PREMIUM(59999.0);
+    PLANO_BASICO(6999.0),
+    PLANO_ESSENCIAL(11999.0),
+    PLANO_PRO(57599.0),
+    PLANO_PREMIUM(115099.0);
 
     private final Double value;
 
@@ -26,15 +26,15 @@ public enum PlansEnum {
     }
 
     public boolean isSemanal() {
-        return this.equals(PLANO_SEMANAL);
+        return this.equals(PLANO_BASICO);
     }
 
-    public boolean isQuinzenal() {
-        return this.equals(PLANO_QUINZENAL);
+    public boolean isEssencial() {
+        return this.equals(PLANO_ESSENCIAL);
     }
 
-    public boolean isMensal() {
-        return this.equals(PLANO_MENSAL);
+    public boolean isPro() {
+        return this.equals(PLANO_PRO);
     }
 
     public boolean isPremium() {

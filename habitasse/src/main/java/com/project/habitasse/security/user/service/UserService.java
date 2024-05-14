@@ -248,15 +248,22 @@ public class UserService implements UserDetailsService {
 
     public void activateCOUser(String email,
                                PlansEnum plan,
-                               String receiptUrl,
                                String eventId,
                                String objectId,
-                               String invoiceId,
-                               String balanceTransactionId,
                                String userName,
+                               Integer clientReference,
+                               Double amountTotal,
                                LocalDateTime created) {
         User user = userRepository.findByEmailAndExcludedFalse(email).get();
-        Payment payment = Payment.createPayment(user.getId(), eventId, objectId, invoiceId, balanceTransactionId, userName, created, plan, receiptUrl);
+        Payment payment = Payment.createPayment(
+                user.getId(),
+                plan,
+                eventId,
+                objectId,
+                userName,
+                clientReference,
+                amountTotal,
+                created);
         user.getPayments().add(payment);
         userRepository.save(user);
     }

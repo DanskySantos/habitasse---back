@@ -22,23 +22,24 @@ public class Payment extends SuperclassEntity implements Serializable {
     @Column(name = "user_id")
     private Integer userId;
 
+    @Column(name = "plan", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private PlansEnum plan;
+
     @Column(name = "event_id")
     private String eventId;
 
     @Column(name = "object_id")
     private String objectId;
 
-    @Column(name = "invoice_id")
-    private String invoiceId;
-
-    @Column(name = "balance_transaction_id")
-    private String balanceTransactionId;
-
     @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "created")
-    private LocalDateTime created;
+    @Column(name = "client_reference")
+    private Integer clientReference;
+
+    @Column(name = "amount_total")
+    private Double amountTotal;
 
     @Column(name = "authorization_date", nullable = false)
     private LocalDateTime authorizationDate;
@@ -46,32 +47,22 @@ public class Payment extends SuperclassEntity implements Serializable {
     @Column(name = "expiration_date", nullable = false)
     private LocalDateTime expirationDate;
 
-    @Column(name = "plan", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private PlansEnum plan;
-
-    @Column(name = "receipt_url", nullable = false)
-    private String receipt_url;
-
     public static Payment createPayment(Integer userId,
+                                        PlansEnum plan,
                                         String eventId,
                                         String objectId,
-                                        String invoiceId,
-                                        String balanceTransactionId,
                                         String userName,
-                                        LocalDateTime created,
-                                        PlansEnum plan,
-                                        String receipt_url) {
+                                        Integer clientReference,
+                                        Double amountTotal,
+                                        LocalDateTime created) {
         return Payment.builder()
                 .userId(userId)
+                .plan(plan)
                 .eventId(eventId)
                 .objectId(objectId)
-                .invoiceId(invoiceId)
-                .balanceTransactionId(balanceTransactionId)
                 .userName(userName)
-                .created(created)
-                .plan(plan)
-                .receipt_url(receipt_url)
+                .clientReference(clientReference)
+                .amountTotal(amountTotal)
                 .authorizationDate(created)
                 .expirationDate(getExpirationDate(plan, created))
                 .build();

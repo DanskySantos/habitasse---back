@@ -5,18 +5,18 @@ import lombok.Getter;
 @Getter
 public enum PlansEnum {
 
-    PLANO_BASICO(6999.0),
-    PLANO_ESSENCIAL(11999.0),
-    PLANO_PRO(57599.0),
-    PLANO_PREMIUM(115099.0);
+    PLANO_BASICO(1),
+    PLANO_ESSENCIAL(2),
+    PLANO_PRO(3),
+    PLANO_PREMIUM(4);
 
-    private final Double value;
+    private final Integer value;
 
-    PlansEnum(Double value) {
+    PlansEnum(Integer value) {
         this.value = value;
     }
 
-    public static PlansEnum getByValue(Double value) {
+    public static PlansEnum getByReference(Integer value) {
         for (PlansEnum plansEnum : values()) {
             if (plansEnum.getValue().equals(value)) {
                 return plansEnum;

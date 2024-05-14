@@ -5,15 +5,13 @@ create table tb_payment
     update_date            timestamp,
     uuid                   varchar(255),
     user_id                bigint,
+    plan                   varchar(255),
     event_id               varchar(255),
     object_id              varchar(255),
-    invoice_id             varchar(255),
-    balance_transaction_id varchar(255),
     user_name              varchar(255),
-    created                timestamp,
+    client_reference       bigint,
+    amount_total           double precision,
     authorization_date     timestamp,
     expiration_date        timestamp,
-    plan                   varchar(255),
-    receipt_url            varchar(510),
     primary key (id)
 );

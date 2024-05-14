@@ -33,7 +33,7 @@ public class PaymentController {
         try {
             Event event = Webhook.constructEvent(payload, sigHeader, webhookSecret);
 
-            if (Objects.equals(event.getType(), "charge.succeeded")) {
+            if (Objects.equals(event.getType(), "checkout.session.completed")) {
                 stripePaymentService.succeededPayment(event);
             }
             return ResponseEntity.ok().build();

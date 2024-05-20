@@ -39,10 +39,12 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     private BedroomsNumberEnum bedroomsNumber;
 
     @Column(name = "furnished", nullable = false)
-    private boolean furnished;
+    @Enumerated(EnumType.STRING)
+    private BooleanEnum furnished;
 
     @Column(name = "pet_friendly", nullable = false)
-    private boolean petFriendly;
+    @Enumerated(EnumType.STRING)
+    private BooleanEnum petFriendly;
 
     @Column(name = "suggested_value_for_rent")
     @Enumerated(EnumType.STRING)
@@ -77,8 +79,8 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
                 .contractType(ContractTypeEnum.getByDescription(propertyDemandRequest.getContractType()))
                 .propertyType(PropertyTypeEnum.getByDescription(propertyDemandRequest.getPropertyType()))
                 .bedroomsNumber(BedroomsNumberEnum.getByDescription(propertyDemandRequest.getBedroomsNumber()))
-                .furnished(Objects.equals(propertyDemandRequest.getFurnished(), "Sim"))
-                .petFriendly(Objects.equals(propertyDemandRequest.getPetFriendly(), "Sim"))
+                .furnished(BooleanEnum.getByDescription(propertyDemandRequest.getFurnished()))
+                .petFriendly(BooleanEnum.getByDescription(propertyDemandRequest.getPetFriendly()))
                 .suggestedValueForRent(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForRent())
                         ? null
                         : SuggestedValueForRentEnum.getByDescription(propertyDemandRequest.getSuggestedValueForRent()))
@@ -96,12 +98,12 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
         return propertyDemand;
     }
 
-    public static PropertyDemand updateDemand(PropertyDemand propertyDemand, PropertyDemandRequest propertyDemandRequest){
+    public static PropertyDemand updateDemand(PropertyDemand propertyDemand, PropertyDemandRequest propertyDemandRequest) {
         propertyDemand.setContractType(ContractTypeEnum.getByDescription(propertyDemandRequest.getContractType()));
         propertyDemand.setPropertyType(PropertyTypeEnum.getByDescription(propertyDemandRequest.getPropertyType()));
         propertyDemand.setBedroomsNumber(BedroomsNumberEnum.getByDescription(propertyDemandRequest.getBedroomsNumber()));
-        propertyDemand.setFurnished(Objects.equals(propertyDemandRequest.getFurnished(), "Sim"));
-        propertyDemand.setPetFriendly(Objects.equals(propertyDemandRequest.getPetFriendly(), "Sim"));
+        propertyDemand.setFurnished(BooleanEnum.getByDescription(propertyDemandRequest.getFurnished()));
+        propertyDemand.setPetFriendly(BooleanEnum.getByDescription(propertyDemandRequest.getPetFriendly()));
         propertyDemand.setSuggestedValueForRent(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForRent())
                  ? null
                  : SuggestedValueForRentEnum.getByDescription(propertyDemandRequest.getSuggestedValueForRent()));

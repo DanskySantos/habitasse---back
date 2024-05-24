@@ -12,10 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 @Data
 @Builder
@@ -34,15 +33,15 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private PropertyTypeEnum propertyType;
 
-    @Column(name = "bedrooms_number", nullable = false)
+    @Column(name = "bedrooms_number")
     @Enumerated(EnumType.STRING)
     private BedroomsNumberEnum bedroomsNumber;
 
-    @Column(name = "furnished", nullable = false)
+    @Column(name = "furnished")
     @Enumerated(EnumType.STRING)
     private BooleanEnum furnished;
 
-    @Column(name = "pet_friendly", nullable = false)
+    @Column(name = "pet_friendly")
     @Enumerated(EnumType.STRING)
     private BooleanEnum petFriendly;
 
@@ -78,9 +77,15 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
         return PropertyDemand.builder()
                 .contractType(ContractTypeEnum.getByDescription(propertyDemandRequest.getContractType()))
                 .propertyType(PropertyTypeEnum.getByDescription(propertyDemandRequest.getPropertyType()))
-                .bedroomsNumber(BedroomsNumberEnum.getByDescription(propertyDemandRequest.getBedroomsNumber()))
-                .furnished(BooleanEnum.getByDescription(propertyDemandRequest.getFurnished()))
-                .petFriendly(BooleanEnum.getByDescription(propertyDemandRequest.getPetFriendly()))
+                .bedroomsNumber(StringUtils.isEmpty(propertyDemandRequest.getBedroomsNumber())
+                        ? null
+                        : BedroomsNumberEnum.getByDescription(propertyDemandRequest.getBedroomsNumber()))
+                .furnished(StringUtils.isEmpty(propertyDemandRequest.getFurnished())
+                        ? null
+                        : BooleanEnum.getByDescription(propertyDemandRequest.getFurnished()))
+                .petFriendly(StringUtils.isEmpty(propertyDemandRequest.getPetFriendly())
+                        ? null
+                        : BooleanEnum.getByDescription(propertyDemandRequest.getPetFriendly()))
                 .suggestedValueForRent(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForRent())
                         ? null
                         : SuggestedValueForRentEnum.getByDescription(propertyDemandRequest.getSuggestedValueForRent()))
@@ -93,7 +98,7 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
                 .build();
     }
 
-    public static PropertyDemand delete(PropertyDemand propertyDemand){
+    public static PropertyDemand delete(PropertyDemand propertyDemand) {
         propertyDemand.setDeleted(true);
         return propertyDemand;
     }
@@ -101,18 +106,24 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     public static PropertyDemand updateDemand(PropertyDemand propertyDemand, PropertyDemandRequest propertyDemandRequest) {
         propertyDemand.setContractType(ContractTypeEnum.getByDescription(propertyDemandRequest.getContractType()));
         propertyDemand.setPropertyType(PropertyTypeEnum.getByDescription(propertyDemandRequest.getPropertyType()));
-        propertyDemand.setBedroomsNumber(BedroomsNumberEnum.getByDescription(propertyDemandRequest.getBedroomsNumber()));
-        propertyDemand.setFurnished(BooleanEnum.getByDescription(propertyDemandRequest.getFurnished()));
-        propertyDemand.setPetFriendly(BooleanEnum.getByDescription(propertyDemandRequest.getPetFriendly()));
+        propertyDemand.setBedroomsNumber(StringUtils.isEmpty(propertyDemandRequest.getBedroomsNumber())
+                ? null
+                : BedroomsNumberEnum.getByDescription(propertyDemandRequest.getBedroomsNumber()));
+        propertyDemand.setFurnished(StringUtils.isEmpty(propertyDemandRequest.getFurnished())
+                ? null
+                : BooleanEnum.getByDescription(propertyDemandRequest.getFurnished()));
+        propertyDemand.setPetFriendly(StringUtils.isEmpty(propertyDemandRequest.getPetFriendly())
+                ? null
+                : BooleanEnum.getByDescription(propertyDemandRequest.getPetFriendly()));
         propertyDemand.setSuggestedValueForRent(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForRent())
-                 ? null
-                 : SuggestedValueForRentEnum.getByDescription(propertyDemandRequest.getSuggestedValueForRent()));
+                ? null
+                : SuggestedValueForRentEnum.getByDescription(propertyDemandRequest.getSuggestedValueForRent()));
         propertyDemand.setSuggestedValueForSale(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForSale())
-                 ? null
-                 : SuggestedValueForSaleEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSale()));
+                ? null
+                : SuggestedValueForSaleEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSale()));
         propertyDemand.setSuggestedValueForSeasonal(StringUtils.isEmpty(propertyDemandRequest.getSuggestedValueForSeasonal())
-                 ? null
-                 : SuggestedValueForSeasonalEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSeasonal()));
+                ? null
+                : SuggestedValueForSeasonalEnum.getByDescription(propertyDemandRequest.getSuggestedValueForSeasonal()));
         propertyDemand.demand.setAnnotation(propertyDemandRequest.getAnnotation());
         propertyDemand.address.setState(propertyDemandRequest.getState());
         propertyDemand.address.setCity(propertyDemandRequest.getCity());

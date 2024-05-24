@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 public enum BooleanEnum {
 
+    NULL("null"),
     YES("Sim"),
     NO("Não"),
     INDIFFERENT("Indiferente");

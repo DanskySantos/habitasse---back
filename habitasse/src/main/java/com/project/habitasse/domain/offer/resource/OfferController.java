@@ -4,6 +4,7 @@ import com.project.habitasse.domain.offer.entities.Offer;
 import com.project.habitasse.domain.offer.entities.request.OfferRequest;
 import com.project.habitasse.domain.offer.service.OfferService;
 import com.project.habitasse.domain.propertyDemand.entities.PropertyDemand;
+import com.project.habitasse.shared.mail.EmailService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +23,7 @@ public class OfferController {
     private final OfferService offerService;
 
     @PostMapping("/save")
-    public ResponseEntity<?> registerDemand(@RequestBody OfferRequest offerRequest, HttpServletRequest request) throws Exception {
+    public ResponseEntity<?> registerOffer(@RequestBody OfferRequest offerRequest, HttpServletRequest request) throws Exception {
         if (offerRequest.getDemandId() == null || StringUtils.isEmpty(offerRequest.getText()))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Dados inválidos");
 
@@ -30,7 +31,7 @@ public class OfferController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updatePropertyDemand(@PathVariable Long id, @RequestBody OfferRequest offerRequest) throws Exception {
+    public ResponseEntity<?> updateOffer(@PathVariable Long id, @RequestBody OfferRequest offerRequest) throws Exception {
         if (id == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID inválido");
 
@@ -41,7 +42,7 @@ public class OfferController {
     }
 
     @GetMapping("/findByDemand/{demandId}/{page}/{size}")
-    public ResponseEntity<?> getByUserEmail(@PathVariable Integer demandId,
+    public ResponseEntity<?> getByDemand(@PathVariable Integer demandId,
                                             @PathVariable Integer page,
                                             @PathVariable Integer size) {
         if (demandId == null)

@@ -3,7 +3,7 @@ package com.project.habitasse.security.person.entities;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.habitasse.domain.common.SuperclassEntity;
 import com.project.habitasse.security.user.entities.request.RegisterRequest;
-import com.project.habitasse.utils.Utils;
+import com.project.habitasse.shared.utils.Utils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

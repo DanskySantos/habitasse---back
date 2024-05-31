@@ -1,4 +1,4 @@
-package com.project.habitasse.utils;
+package com.project.habitasse.shared.utils;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

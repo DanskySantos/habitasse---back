@@ -7,7 +7,7 @@ import com.project.habitasse.security.person.entities.Person;
 import com.project.habitasse.security.roles.entity.Role;
 import com.project.habitasse.security.user.entities.request.RegisterRequest;
 import com.project.habitasse.security.user.entities.request.UserRequest;
-import com.project.habitasse.utils.Utils;
+import com.project.habitasse.shared.utils.Utils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;

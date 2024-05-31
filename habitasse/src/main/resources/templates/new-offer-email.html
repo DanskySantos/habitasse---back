@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <style>
+            h1 {
+                color: #46BB95;
+            }
+            p {
+                font-size: 16px;
+                color: #333333;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Proposta Recebida - Habitasse</h1>
+        <p>Ooba! <span th:text="${userName}"></span> você recebeu uma nova proposta no Habitasse! Acesse
+            <a href="https://habitasseapp.com/auth/login" target="_blank">habitasseapp</a>
+            para ver os detalhes.
+        </p>
+    </body>
+</html>

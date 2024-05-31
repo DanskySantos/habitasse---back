@@ -39,7 +39,7 @@ public class OfferService {
 
     public Offer saveOffer(OfferRequest offerRequest, String token) throws Exception {
         Demand demand = demandRepository.findById(offerRequest.getDemandId()).orElseThrow();
-        Map<String, Object> variables = this.createEmailVariables(demand.getUser().getUsername());
+        Map<String, Object> variables = this.createEmailVariables(demand.getUser().getUsernameForDto());
         try {
             User user = userRepository.findByEmailAndExcludedFalse(jwtService.getEmail(token)).orElseThrow();
 

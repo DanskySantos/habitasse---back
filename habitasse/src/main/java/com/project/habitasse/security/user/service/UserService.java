@@ -56,7 +56,7 @@ public class UserService implements UserDetailsService {
         createUsername(registerRequest);
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequest.getPassword());
         registerRequest.setPassword(encryptedPassword);
-        Long remainingDays = null;
+        Long remainingDays = 0L;
 
         User newUser = User.createUser(registerRequest);
         Person newPerson = Person.createPerson(registerRequest);
@@ -103,7 +103,7 @@ public class UserService implements UserDetailsService {
             var jwtToken = jwtService.generateTokenWithRole(user);
             var refreshToken = jwtService.generateRefreshToken(user);
 
-            Long remainingDays = null;
+            Long remainingDays = 0L;
             revokeAllUserTokens(user);
             saveUserToken(user, jwtToken);
 
@@ -191,7 +191,7 @@ public class UserService implements UserDetailsService {
     public UserResponse findByTokenEmail(String token) {
         var user = userRepository.findByEmailAndExcludedFalse(jwtService.getEmail(token)).get();
         var demandsQuantity = propertyDemandRepository.countByUser(user);
-        Long remainingDays = null;
+        Long remainingDays = 0L;
 
         if (user.getPayments() != null && !user.getPayments().isEmpty()) {
             Payment lastPayment = user.getPayments().get(user.getPayments().size() - 1);
@@ -205,6 +205,10 @@ public class UserService implements UserDetailsService {
 
         LocalDate todayDate = LocalDate.now();
         LocalDate expirationDate = lastPayment.getExpirationDate().toLocalDate();
+
+        if (ChronoUnit.DAYS.between(todayDate, expirationDate) < 0) {
+            return 0L;
+        }
 
         return ChronoUnit.DAYS.between(todayDate, expirationDate);
     }

@@ -3,6 +3,8 @@ package com.project.habitasse.security.user.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.habitasse.domain.propertyDemand.repository.PropertyDemandRepository;
 import com.project.habitasse.outside.enums.PlansEnum;
+import com.project.habitasse.security.confirmationCode.entities.ConfirmationCode;
+import com.project.habitasse.security.confirmationCode.repository.ConfirmationCodeRepository;
 import com.project.habitasse.security.payment.entities.Payment;
 import com.project.habitasse.security.person.entities.Person;
 import com.project.habitasse.security.person.repository.PersonRepository;
@@ -11,21 +13,20 @@ import com.project.habitasse.security.token.entity.Token;
 import com.project.habitasse.security.token.repository.TokenRepository;
 import com.project.habitasse.security.token.tokenEnum.TokenType;
 import com.project.habitasse.security.user.entities.User;
-import com.project.habitasse.security.user.entities.request.AuthenticationRequest;
-import com.project.habitasse.security.user.entities.request.RegisterRequest;
-import com.project.habitasse.security.user.entities.request.UpdateUserPasswordRequest;
-import com.project.habitasse.security.user.entities.request.UserRequest;
+import com.project.habitasse.security.user.entities.request.*;
 import com.project.habitasse.security.user.entities.response.AuthenticationResponse;
 import com.project.habitasse.security.user.entities.response.UserResponse;
 import com.project.habitasse.security.user.repository.UserRepository;
+import com.project.habitasse.shared.mail.EmailService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.InvalidPropertyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,8 +38,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -50,9 +50,18 @@ public class UserService implements UserDetailsService {
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
     private final PropertyDemandRepository propertyDemandRepository;
+    private final ConfirmationCodeRepository confirmationCodeRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
-    public AuthenticationResponse register(RegisterRequest registerRequest) {
+    private Map<String, Object> createEmailVariables(String userName, Integer confirmationCode) {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("userName", userName);
+        variables.put("confirmationCode", confirmationCode);
+        return variables;
+    }
+
+    public AuthenticationResponse register(RegisterRequest registerRequest) throws MessagingException {
         createUsername(registerRequest);
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequest.getPassword());
         registerRequest.setPassword(encryptedPassword);
@@ -71,10 +80,18 @@ public class UserService implements UserDetailsService {
         var refreshToken = jwtService.generateRefreshToken(userSaved);
         saveUserToken(userSaved, jwtToken);
 
+        //remove the line bellow to not give 1 month free access
+        this.activateCOUser(userSaved.getEmail(), PlansEnum.PLANO_ESSENCIAL, null, null, userSaved.getUsernameForDto(), 2, 0.0, LocalDateTime.now());
+
         if (userSaved.getPayments() != null && !userSaved.getPayments().isEmpty()) {
             Payment lastPayment = userSaved.getPayments().get(userSaved.getPayments().size() - 1);
             remainingDays = getRemainingDays(lastPayment);
         }
+
+        ConfirmationCode confirmationCode = confirmationCodeRepository.save(ConfirmationCode.createConfirmationCode(userSaved.getId()));
+        Map<String, Object> variables = createEmailVariables(userSaved.getUsernameForDto(), confirmationCode.getCode());
+
+        emailService.sendEmail(userSaved.getEmail(), "Código de confirmação!", "confirmation-code-email", variables);
 
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
@@ -83,6 +100,7 @@ public class UserService implements UserDetailsService {
                 .userRole(String.valueOf(userSaved.getRole()))
                 .refreshToken(refreshToken)
                 .remainingDays(remainingDays)
+                .isAccountConfirmed(userSaved.getIsAccountConfirmed())
                 .build();
     }
 
@@ -120,6 +138,7 @@ public class UserService implements UserDetailsService {
                             .userName(user.getUsernameForDto())
                             .userRole(String.valueOf(user.getRole()))
                             .remainingDays(remainingDays)
+                            .isAccountConfirmed(user.getIsAccountConfirmed())
                             .build()
             );
         } catch (AuthenticationException e) {
@@ -174,6 +193,29 @@ public class UserService implements UserDetailsService {
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
         }
+    }
+
+    public void resendCode(String email) throws MessagingException {
+        var user = userRepository.findByEmailAndExcludedFalse(email).get();
+        var confirmationCode = confirmationCodeRepository.findConfirmationCodeByUserId(user.getId()).get();
+        var updatedCode = confirmationCodeRepository.save(ConfirmationCode.updateConfirmationCode(confirmationCode));
+
+        Map<String, Object> variables = createEmailVariables(user.getUsernameForDto(), updatedCode.getCode());
+
+        emailService.sendEmail(user.getEmail(), "Código de confirmação!", "confirmation-code-email", variables);
+    }
+
+    public User authorizeAccount(AuthorizeRequest authorizeRequest) throws IOException {
+        var user = userRepository.findByEmailAndExcludedFalse(authorizeRequest.getEmail()).get();
+        var confirmationCode = confirmationCodeRepository.findConfirmationCodeByUserId(user.getId()).get();
+
+        if (Objects.equals(authorizeRequest.getCode(), confirmationCode.getCode())) {
+            user.setIsAccountConfirmed(true);
+            userRepository.save(user);
+        } else {
+            throw new IOException("Código Inválido");
+        }
+        return user;
     }
 
     public List<User> findAllUser() {
@@ -268,6 +310,9 @@ public class UserService implements UserDetailsService {
                 clientReference,
                 amountTotal,
                 created);
+        if (user.getPayments() == null) {
+            user.setPayments(new ArrayList<>());
+        }
         user.getPayments().add(payment);
         userRepository.save(user);
     }

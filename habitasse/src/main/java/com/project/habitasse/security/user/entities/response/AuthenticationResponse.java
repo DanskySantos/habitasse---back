@@ -29,4 +29,7 @@ public class AuthenticationResponse {
 
     @JsonProperty("remainingDays")
     private Long remainingDays;
+
+    @JsonProperty("isAccountConfirmed")
+    private Boolean isAccountConfirmed;
 }

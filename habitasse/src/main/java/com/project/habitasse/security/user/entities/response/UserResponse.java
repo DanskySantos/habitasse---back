@@ -34,6 +34,7 @@ public class UserResponse {
     private Boolean accountNonExpired;
     private Integer demandsQuantity;
     private Long remainingDays;
+    private Boolean isAccountConfirmed;
 
     public static UserResponse mapEntityToResponse(User user, Integer demandsQuantity, Long remainingDays) {
 
@@ -48,6 +49,7 @@ public class UserResponse {
                 .role(user.getRole().name())
                 .demandsQuantity(demandsQuantity > 0 ? demandsQuantity : 0)
                 .remainingDays(remainingDays != null ? remainingDays : null)
+                .isAccountConfirmed(user.getIsAccountConfirmed())
                 .build();
     }
 }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <style>
+            h1 {
+                color: #46BB95 !important;
+            }
+            p {
+                font-size: 16px !important;
+                color: #333333 !important;
+            }
+            div {
+                display: flex !important;
+                justify-content: center !important;
+                flex-direction: column !important;
+                align-items: center !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <h1>Código de confirmação de conta.</h1>
+            <p>Olá <span th:text="${userName}"></span>! Copie e cole o código abaixo no
+                <a href="https://habitasseapp.com/auth/login" target="_blank">habitasseapp</a>!
+            </p>
+            <br>
+            <br>
+            <p>
+                <h1 th:text="${confirmationCode}"></h1>
+            </p>
+        </div>
+    </body>
+</html>

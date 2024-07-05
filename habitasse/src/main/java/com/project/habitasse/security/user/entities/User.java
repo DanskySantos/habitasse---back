@@ -57,6 +57,9 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
     @Column(name = "excluded")
     private boolean excluded = false;
 
+    @Column(name = "account_confirmed")
+    private Boolean isAccountConfirmed = false;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();
@@ -103,6 +106,7 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
                 .password(registerRequest.getPassword())
                 .email(registerRequest.getEmail())
                 .excluded(false)
+                .isAccountConfirmed(false)
                 .role(Objects.equals(registerRequest.getUserRoles(), "USER_CO") ? Role.USER_CO : Role.USER_CD)
                 .build();
     }
@@ -128,6 +132,11 @@ public class User extends SuperclassEntity implements Serializable, UserDetails 
 
     public static User deleteUser(User user) {
         user.setExcluded(true);
+        return user;
+    }
+
+    public static User confirmAccount(User user) {
+        user.setIsAccountConfirmed(true);
         return user;
     }
 }

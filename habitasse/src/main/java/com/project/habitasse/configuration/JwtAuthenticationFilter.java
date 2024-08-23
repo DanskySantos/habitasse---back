@@ -37,13 +37,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
 
-        if (request.getServletPath().contains("/api/v1/auth")) {
+        if (request.getServletPath().contains("/api/v1/auth") || request.getServletPath().contains("/api/v1/new-demand")) {
             if (authHeader == null || !authHeader.startsWith("Basic ")) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;

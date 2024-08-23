@@ -46,6 +46,24 @@ public class PropertyDemandService {
         return newPropertyDemand;
     }
 
+    public PropertyDemand registerNewDemand(PropertyDemandRequest propertyDemandRequest) {
+        Address address = Address.createAddress(propertyDemandRequest);
+        PropertyDemand newPropertyDemand = PropertyDemand.createPropertyDemand(propertyDemandRequest);
+
+        newPropertyDemand.setAddress(address);
+//        newPropertyDemand.setUser(userRepository.findByEmailAndExcludedFalse(jwtService.getEmail(token)).orElseThrow());
+
+        addressRepository.save(address);
+        PropertyDemand propertyDemand = propertyDemandRepository.save(newPropertyDemand);
+
+        propertyDemandRequest.setPropertyDemand(propertyDemand);
+        Demand demand = Demand.createDemand(propertyDemandRequest);
+
+        propertyDemand.setDemand(demandRepository.save(demand));
+        propertyDemandRepository.save(propertyDemand);
+        return newPropertyDemand;
+    }
+
 //    public Optional<List<PropertyDemand>> findByEmail(String email) {
 //        return propertyDemandRepository.findAllByEmail(email);
 //    }

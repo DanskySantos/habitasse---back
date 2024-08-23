@@ -38,7 +38,7 @@ public class Demand extends SuperclassEntity implements Serializable {
     private List<Offer> offers;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Column(name = "is_deleted")

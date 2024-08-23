@@ -44,6 +44,17 @@ public class AuthLoginController {
         return ResponseEntity.ok(userService.register(registerRequest));
     }
 
+    @PostMapping("/registerNewUser")
+    public ResponseEntity<?> registerNewUser(@RequestBody RegisterRequest registerRequest) throws MessagingException {
+        if (userService.findByEmail(registerRequest.getEmail()).isPresent())
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Já existe um usuário cadastrado com esse e-mail");
+
+        if (registerRequest.getUserRoles() == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Role não pode ser nula");
+
+        return ResponseEntity.ok(userService.registerNewUser(registerRequest));
+    }
+
     @PostMapping("/refresh-token")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         userService.refreshToken(request, response);

@@ -1,6 +1,7 @@
 package com.project.habitasse.security.user.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.habitasse.domain.propertyDemand.entities.PropertyDemand;
 import com.project.habitasse.domain.propertyDemand.repository.PropertyDemandRepository;
 import com.project.habitasse.outside.enums.PlansEnum;
 import com.project.habitasse.security.confirmationCode.entities.ConfirmationCode;
@@ -8,6 +9,7 @@ import com.project.habitasse.security.confirmationCode.repository.ConfirmationCo
 import com.project.habitasse.security.payment.entities.Payment;
 import com.project.habitasse.security.person.entities.Person;
 import com.project.habitasse.security.person.repository.PersonRepository;
+import com.project.habitasse.security.roles.entity.Role;
 import com.project.habitasse.security.service.JwtService;
 import com.project.habitasse.security.token.entity.Token;
 import com.project.habitasse.security.token.repository.TokenRepository;
@@ -81,7 +83,56 @@ public class UserService implements UserDetailsService {
         saveUserToken(userSaved, jwtToken);
 
         //remove the line bellow to not give 1 month free access
-        this.activateCOUser(userSaved.getEmail(), PlansEnum.PLANO_ESSENCIAL, null, null, userSaved.getUsernameForDto(), 2, 0.0, LocalDateTime.now());
+        if (userSaved.getRole() == Role.USER_CO)
+            this.activateCOUser(userSaved.getEmail(), PlansEnum.PLANO_ESSENCIAL, null, null, userSaved.getUsernameForDto(), 2, 0.0, LocalDateTime.now());
+
+        if (userSaved.getPayments() != null && !userSaved.getPayments().isEmpty()) {
+            Payment lastPayment = userSaved.getPayments().get(userSaved.getPayments().size() - 1);
+            remainingDays = getRemainingDays(lastPayment);
+        }
+
+        ConfirmationCode confirmationCode = confirmationCodeRepository.save(ConfirmationCode.createConfirmationCode(userSaved.getId()));
+        Map<String, Object> variables = createEmailVariables(userSaved.getUsernameForDto(), confirmationCode.getCode());
+
+        emailService.sendEmail(userSaved.getEmail(), "Código de confirmação!", "confirmation-code-email", variables);
+
+        return AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .userId(userSaved.getId())
+                .userName(userSaved.getUsernameForDto())
+                .userRole(String.valueOf(userSaved.getRole()))
+                .refreshToken(refreshToken)
+                .remainingDays(remainingDays)
+                .isAccountConfirmed(userSaved.getIsAccountConfirmed())
+                .build();
+    }
+
+    public AuthenticationResponse registerNewUser(RegisterRequest registerRequest) throws MessagingException {
+        PropertyDemand propertyDemand = this.propertyDemandRepository.findById(Long.valueOf(registerRequest.getPropertyDemandId())).get();
+        createUsername(registerRequest);
+        String encryptedPassword = new BCryptPasswordEncoder().encode(registerRequest.getPassword());
+        registerRequest.setPassword(encryptedPassword);
+        Long remainingDays = 0L;
+
+        User newUser = User.createUser(registerRequest);
+        Person newPerson = Person.createPerson(registerRequest);
+
+        Person personSaved = personRepository.save(newPerson);
+        User userSaved = userRepository.save(newUser);
+
+        propertyDemand.setUser(userSaved);
+        propertyDemand.getDemand().setUser(userSaved);
+
+        personSaved.setUserId(userSaved.getId());
+        userSaved.setPerson(personSaved);
+
+        var jwtToken = jwtService.generateTokenWithRole(userSaved);
+        var refreshToken = jwtService.generateRefreshToken(userSaved);
+        saveUserToken(userSaved, jwtToken);
+
+        //remove the line bellow to not give 1 month free access
+        if (userSaved.getRole() == Role.USER_CO)
+            this.activateCOUser(userSaved.getEmail(), PlansEnum.PLANO_ESSENCIAL, null, null, userSaved.getUsernameForDto(), 2, 0.0, LocalDateTime.now());
 
         if (userSaved.getPayments() != null && !userSaved.getPayments().isEmpty()) {
             Payment lastPayment = userSaved.getPayments().get(userSaved.getPayments().size() - 1);

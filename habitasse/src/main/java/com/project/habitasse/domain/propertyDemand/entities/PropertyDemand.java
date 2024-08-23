@@ -67,7 +67,7 @@ public class PropertyDemand extends SuperclassEntity implements Serializable {
     private Address address;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Column(name = "deleted")

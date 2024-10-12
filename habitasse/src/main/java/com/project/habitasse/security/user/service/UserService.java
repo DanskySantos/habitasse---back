@@ -84,7 +84,7 @@ public class UserService implements UserDetailsService {
 
         //remove the line bellow to not give 1 month free access
         if (userSaved.getRole() == Role.USER_CO)
-            this.activateCOUser(userSaved.getEmail(), PlansEnum.PLANO_ESSENCIAL, null, null, userSaved.getUsernameForDto(), 2, 0.0, LocalDateTime.now());
+            this.activateCOUser(userSaved.getEmail(), PlansEnum.PERIODO_GRATUIDADE, null, null, userSaved.getUsernameForDto(), 2, 0.0, LocalDateTime.now());
 
         if (userSaved.getPayments() != null && !userSaved.getPayments().isEmpty()) {
             Payment lastPayment = userSaved.getPayments().get(userSaved.getPayments().size() - 1);
@@ -132,7 +132,7 @@ public class UserService implements UserDetailsService {
 
         //remove the line bellow to not give 1 month free access
         if (userSaved.getRole() == Role.USER_CO)
-            this.activateCOUser(userSaved.getEmail(), PlansEnum.PLANO_ESSENCIAL, null, null, userSaved.getUsernameForDto(), 2, 0.0, LocalDateTime.now());
+            this.activateCOUser(userSaved.getEmail(), PlansEnum.PERIODO_GRATUIDADE, null, null, userSaved.getUsernameForDto(), 2, 0.0, LocalDateTime.now());
 
         if (userSaved.getPayments() != null && !userSaved.getPayments().isEmpty()) {
             Payment lastPayment = userSaved.getPayments().get(userSaved.getPayments().size() - 1);

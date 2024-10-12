@@ -70,10 +70,10 @@ public class Payment extends SuperclassEntity implements Serializable {
 
     public static LocalDateTime getExpirationDate(PlansEnum plansEnum, LocalDateTime created) {
         return switch (plansEnum) {
-            case PLANO_BASICO -> created.plusDays(15);
             case PLANO_ESSENCIAL -> created.plusDays(30);
             case PLANO_PRO -> created.plusDays(180);
             case PLANO_PREMIUM -> created.plusDays(365);
+            case PERIODO_GRATUIDADE -> created.plusDays(7); 
         };
     }
 }

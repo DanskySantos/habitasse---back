@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public enum PlansEnum {
 
-    PLANO_BASICO(1),
-    PLANO_ESSENCIAL(2),
-    PLANO_PRO(3),
-    PLANO_PREMIUM(4);
+    PLANO_ESSENCIAL(1),
+    PLANO_PRO(2),
+    PLANO_PREMIUM(3),
+    PERIODO_GRATUIDADE(4);
 
     private final Integer value;
 
@@ -25,10 +25,6 @@ public enum PlansEnum {
         throw new IllegalArgumentException("No plan found with value: " + value);
     }
 
-    public boolean isSemanal() {
-        return this.equals(PLANO_BASICO);
-    }
-
     public boolean isEssencial() {
         return this.equals(PLANO_ESSENCIAL);
     }
@@ -39,5 +35,9 @@ public enum PlansEnum {
 
     public boolean isPremium() {
         return this.equals(PLANO_PREMIUM);
+    }
+
+    public boolean isGratuidade(){
+        return this.equals(PERIODO_GRATUIDADE);
     }
 }
